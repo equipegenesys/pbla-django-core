@@ -36,7 +36,6 @@ class Disciplina(models.Model):
         for word in name_words:
             iniciais = iniciais + word[:1]
         if len(iniciais) > 3:
-            print('                é maior que 3')
             iniciais = iniciais[:3]
         elif len(iniciais) < 3:
             if len(iniciais) == 2:
@@ -75,7 +74,6 @@ class Turma(models.Model):
         self.tag_turma = self.disciplina.tag_disciplina + str(self.ano) + str(self.semestre)
         trials = 1
         success = False
-        print(alphabet)
         while not success:
             try:
                 with transaction.atomic():
