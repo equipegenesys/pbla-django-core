@@ -6,6 +6,26 @@ from django.db import transaction
 from strgen import StringGenerator as SG
 from string import ascii_uppercase as alphabet
 
+# from django.contrib.auth.models import AbstractUser
+
+class Dash(models.Model):
+    pass
+    # class Meta:
+    #     permissions = (
+    #         ('can_view_dash', 'Can access the dashboard page'),
+    #     )
+    # # name = models.CharField(max_length=300)
+    # # pub_date = models.DateTimeField('date published')
+    
+    # def __str__(self):
+    #     return 'Dash'
+
+class MyEstudante(models.Model):
+    pass
+
+class MyAdm(models.Model):
+    pass
+
 class Instituicao(models.Model):
     name = models.CharField(max_length=300)
     # pub_date = models.DateTimeField('date published')

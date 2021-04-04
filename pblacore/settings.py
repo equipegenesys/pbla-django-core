@@ -26,7 +26,7 @@ SECRET_KEY = 'scb9t+)zmz7d22gmg*ve8w4f276r-e78p$u8$b&4v%6(zb@!hb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['analytics.pbl.tec.br']
+ALLOWED_HOSTS = ['analytics.pbl.tec.br', 'dash']
 
 
 # Application definition
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django_plotly_dash.apps.DjangoPlotlyDashConfig'
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig'
 ]
 
 MIDDLEWARE = [
@@ -125,3 +125,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+X_FRAME_OPTIONS = 'ALLOW-FROM https://analytics.pbl.tec.br/dash/'
