@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User, Group
-from .models import Turma
+from .models import Turma, TurmasClass
 from .serializers import UserSerializer, GroupSerializer, TurmaSerializer
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -46,11 +46,7 @@ class MyAdmView(PermissionRequiredMixin, TemplateView):
     template_name = "home/adm.html"
     permission_required = ('coreapp.view_myadm')
 
-def get_turmas_from_user(user_id: int):
-    turmas_for_user = Turma.user.through.objects.filter(user_id=user_id)
-    for turma in turmas_for_user:
-        print(turma)
-        return {'status': 'OK'}
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -79,24 +75,12 @@ class TurmaViewSet(viewsets.ModelViewSet):
 
 class TurmaUserView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    def get(self,request, *args, **kwargs):
+
+    def get(self, request, *args, **kwargs):
         user_id = kwargs.get('id')
-        queryset = Turma.objects.filter(user__id=user_id)
-        serializer = TurmaSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-
-# @login_required
-# def admin_redirect(request):
-#     return HttpResponse('Você é administrador. Acesse <a href="https://analytics.pbl.tec.br/admin/">aqui</a> o portal de administração.')
-
-# @login_required
-# def professor(request):
-#     template = loader.get_template('vis/dash.html')
-#     return HttpResponse(template.render())
-    # return HttpResponse("Você está na home do professor.")
-
-# @permission_required("coreapp.view_myestudante")
-# def estudante(request):
-#     return HttpResponse("Você está na home do estudante.")
+        myClass = TurmasClass()
+        myClass.user_id = user_id
+        print("                   ", myClass.user_id)
+        result = myClass.get_turmas()
+        response = Response(result, status=status.HTTP_200_OK)
+        return response

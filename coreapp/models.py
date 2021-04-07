@@ -139,9 +139,21 @@ class Equipe(models.Model):
         return f'{self.name} - {self.tag_equipe}'
 
 
-    
-    
-    
+class TurmasClass(object):
+
+    user_id = None
+
+    def __init__(self, *args, **kw):
+        user_id = None
+
+    def get_turmas(user_id: int):
+        turmas_from_user = Turma.user.through.objects.filter(user_id=user_id.user_id)
+        result_dict = {'user': user_id.user_id, 'turmas': []}
+        turma_list = []
+        for turma in turmas_from_user:
+            turma = Turma.objects.get(pk=turma.turma_id)
+            result_dict['turmas'].append(turma.tag_turma)
+        return result_dict
     
     
     

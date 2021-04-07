@@ -26,5 +26,5 @@ router.register(r'groups', GroupViewSet)
 urlpatterns = [
     path('api/core/', include(router.urls)),
     path('api/core/auth', include('rest_framework.urls', namespace='rest_framework')),
-    path('api/core/turmas/user/<int:id>/', TurmaUserView.as_view())
+    path('api/core/turmas/user/<int:id>/', TurmaUserView.as_view()),
     ]
