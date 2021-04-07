@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_plotly_dash.apps.DjangoPlotlyDashConfig'
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +127,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 X_FRAME_OPTIONS = 'ALLOW-FROM https://analytics.pbl.tec.br/dash/'
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+

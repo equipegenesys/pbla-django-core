@@ -10,15 +10,6 @@ from string import ascii_uppercase as alphabet
 
 class Dash(models.Model):
     pass
-    # class Meta:
-    #     permissions = (
-    #         ('can_view_dash', 'Can access the dashboard page'),
-    #     )
-    # # name = models.CharField(max_length=300)
-    # # pub_date = models.DateTimeField('date published')
-    
-    # def __str__(self):
-    #     return 'Dash'
 
 class MyEstudante(models.Model):
     pass
@@ -44,7 +35,7 @@ class Curso(models.Model):
 class Disciplina(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
-    tag_disciplina = models.CharField(max_length=20, unique=True, help_text="A tag da disciplina é gerada automaticamente.")
+    tag_disciplina = models.CharField(max_length=20, unique=True, null=True, default=None, help_text="A tag da disciplina é gerada automaticamente.")
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -63,13 +54,17 @@ class Disciplina(models.Model):
             if len(iniciais) == 1:
                 iniciais = iniciais + str(00)
         iniciais = iniciais.upper()
-        self.tag_disciplina = SG(iniciais+'[A-Z0-9]{3}').render()
+        nova_tag_disciplina = SG(iniciais+'[A-Z0-9]{3}').render()
         trials = 1
         success = False
         while not success:
             try:
                 with transaction.atomic():
-                    super().save(update_fields=['tag_disciplina'])
+                    if self.tag_disciplina == None:
+                        self.tag_disciplina = nova_tag_disciplina
+                        super().save(update_fields=['tag_disciplina'])
+                    elif self.tag_disciplina == nova_tag_disciplina:
+                        pass
             except:
                 trials = trials + 1    
                 if trials > 20:
@@ -86,7 +81,7 @@ class Turma(models.Model):
     disciplina = models.ForeignKey(Disciplina, on_delete=models.CASCADE)
     ano = models.IntegerField()
     semestre = models.IntegerField()
-    tag_turma = models.CharField(max_length=20, unique=True, help_text="A tag da turma é gerada automaticamente.")
+    tag_turma = models.CharField(max_length=20, unique=True, null=True, default = None, help_text="A tag da turma é gerada automaticamente.")
     user = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
     
     def save(self, *args, **kwargs):
@@ -97,7 +92,7 @@ class Turma(models.Model):
         while not success:
             try:
                 with transaction.atomic():
-                    pass
+                    # pass
                     super().save(update_fields=['tag_turma'])
             except:   
                 if trials > 20:
@@ -115,18 +110,22 @@ class Turma(models.Model):
 class Equipe(models.Model):
     name = models.CharField(max_length=200)
     turma = models.ManyToManyField(Turma)
-    tag_equipe = models.CharField(max_length=20, unique=True, help_text="A tag da equipe é gerada automaticamente.")
+    tag_equipe = models.CharField(max_length=20, unique=True, null=True, default = None, help_text="A tag da equipe é gerada automaticamente.")
     user = models.ManyToManyField(settings.AUTH_USER_MODEL)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.tag_equipe = SG('[A-Z0-9]{4}').render()
+        nova_tag_equipe = SG('[A-Z0-9]{4}').render()
         trials = 1
         success = False
         while not success:
             try:
                 with transaction.atomic():
-                    super().save(update_fields=['tag_equipe'])
+                    if self.tag_equipe == None:
+                        self.tag_equipe = nova_tag_equipe
+                        super().save(update_fields=['tag_equipe'])
+                    elif self.tag_equipe == nova_tag_equipe:
+                        pass                     
             except:
                 trials = trials + 1    
                 if trials > 20:

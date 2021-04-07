@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import views as contrib_views
 from django.conf.urls import include
 from pblacore import urls as pblacoreurls
-
-from . import views
+from . import views, urls_api
 
 urlpatterns = [
     path('home/professor', views.Professor.as_view(), name='professor'),
@@ -30,3 +29,5 @@ urlpatterns += [
     path('home/adm', views.MyAdmView.as_view(), name='adm'),
     # path('accounts/login/', contrib_views.LoginView.as_view(), name='login'),
 ]
+
+urlpatterns += urls_api.urlpatterns

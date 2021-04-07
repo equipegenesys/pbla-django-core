@@ -7,7 +7,16 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-
+from django.contrib.auth.models import User, Group
+from .models import Turma
+from .serializers import UserSerializer, GroupSerializer, TurmaSerializer
+from rest_framework import viewsets
+from rest_framework import permissions
+from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 class CustomLoginView(contrib_views.LoginView):
 
@@ -36,6 +45,45 @@ class Estudante(PermissionRequiredMixin, TemplateView):
 class MyAdmView(PermissionRequiredMixin, TemplateView):
     template_name = "home/adm.html"
     permission_required = ('coreapp.view_myadm')
+
+def get_turmas_from_user(user_id: int):
+    turmas_for_user = Turma.user.through.objects.filter(user_id=user_id)
+    for turma in turmas_for_user:
+        print(turma)
+        return {'status': 'OK'}
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class TurmaViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows turmas to be viewed or edited.
+    """
+    queryset = Turma.objects.all()
+    serializer_class = TurmaSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class TurmaUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self,request, *args, **kwargs):
+        user_id = kwargs.get('id')
+        queryset = Turma.objects.filter(user__id=user_id)
+        serializer = TurmaSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 
