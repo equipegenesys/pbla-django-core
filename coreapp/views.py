@@ -17,6 +17,8 @@ from rest_framework.views import APIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from . import gateway
+
 
 class CustomLoginView(contrib_views.LoginView):
 
@@ -41,11 +43,22 @@ class Professor(PermissionRequiredMixin, TemplateView):
 class Estudante(PermissionRequiredMixin, TemplateView):
     template_name = "home/estudante.html"
     permission_required = ('coreapp.view_myestudante')
+    
+    def get_context_data(self, **kwargs):
+        current_user = self.request.user.id
+        g_drive_integ_status = gateway.get_user_gdrive_status(current_user)
+        g_drive_integ_link = gateway.get_gdrive_integ_link(current_user)
+        context = {
+            'current_user': current_user,
+            'g_drive_integ_status': g_drive_integ_status,
+            'g_drive_integ_link': g_drive_integ_link
+            }
+        return context
+
 
 class MyAdmView(PermissionRequiredMixin, TemplateView):
     template_name = "home/adm.html"
     permission_required = ('coreapp.view_myadm')
-
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -65,6 +78,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+
 class TurmaViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows turmas to be viewed or edited.
@@ -73,14 +87,15 @@ class TurmaViewSet(viewsets.ModelViewSet):
     serializer_class = TurmaSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+
 class TurmaUserView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, *args, **kwargs):
         user_id = kwargs.get('id')
         myClass = TurmasClass()
         myClass.user_id = user_id
-        print("                   ", myClass.user_id)
+        # print("                   ", myClass.user_id)
         result = myClass.get_turmas()
         response = Response(result, status=status.HTTP_200_OK)
         return response

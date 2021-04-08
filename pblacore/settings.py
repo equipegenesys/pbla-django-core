@@ -26,7 +26,7 @@ SECRET_KEY = 'scb9t+)zmz7d22gmg*ve8w4f276r-e78p$u8$b&4v%6(zb@!hb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['analytics.pbl.tec.br', 'dash']
+ALLOWED_HOSTS = ['analytics.pbl.tec.br', 'dash', 'pbla_core_1', '172.22.0.8']
 
 
 # Application definition
@@ -132,9 +132,9 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-    
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',    
     ],
+
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
