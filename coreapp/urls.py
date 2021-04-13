@@ -28,6 +28,8 @@ urlpatterns += [
     # path('redirect/admin/', views.admin_redirect, name='admin'),
     path('home/adm', views.MyAdmView.as_view(), name='adm'),
     # path('accounts/login/', contrib_views.LoginView.as_view(), name='login'),
+    path('home/estudante/turmas/', views.TurmasFromUser.as_view(), name='turmas'),
+
 ]
 
 urlpatterns += urls_api.urlpatterns

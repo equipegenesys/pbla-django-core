@@ -3,21 +3,22 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import views as contrib_views
 from django.urls import reverse
 from django.template import loader
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User, Group
-from .models import Turma, TurmasClass
-from .serializers import UserSerializer, GroupSerializer, TurmaSerializer
+
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import generics
 from rest_framework.views import APIView
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
 from . import gateway
+from .serializers import UserSerializer, GroupSerializer, TurmaSerializer
+from .models import Turma, TurmasClass
 
 
 class CustomLoginView(contrib_views.LoginView):
@@ -45,11 +46,16 @@ class Estudante(PermissionRequiredMixin, TemplateView):
     permission_required = ('coreapp.view_myestudante')
     
     def get_context_data(self, **kwargs):
-        current_user = self.request.user.id
-        g_drive_integ_status = gateway.get_user_gdrive_status(current_user)
-        g_drive_integ_link = gateway.get_gdrive_integ_link(current_user)
+        current_user_id = self.request.user.id
+        current_user_first_name = self.request.user.first_name
+        if gateway.get_user_gdrive_status(current_user_id):
+            g_drive_integ_status = 'Integrado'
+        else:
+            g_drive_integ_status = 'Não integrado'
+        g_drive_integ_link = gateway.get_gdrive_integ_link(current_user_id)
         context = {
-            'current_user': current_user,
+            'current_user_id': current_user_id,
+            'current_user_first_name': current_user_first_name,
             'g_drive_integ_status': g_drive_integ_status,
             'g_drive_integ_link': g_drive_integ_link
             }
@@ -99,3 +105,26 @@ class TurmaUserView(APIView):
         result = myClass.get_turmas()
         response = Response(result, status=status.HTTP_200_OK)
         return response
+
+
+class TurmasFromUser(ListView):
+
+    model = Turma
+
+    context_object_name = 'turmas_do_professor'
+
+    template_name = 'home/include_turma.html'
+
+    # def get_context_data(self, **kwargs):
+
+    #     context = {
+    #         'current_user_id': self.request.user.id
+    #     }
+
+    #     return context
+
+    def get_queryset(self):
+
+        queryset = Turma.objects.filter(user__id=self.request.user.id)
+
+        return queryset

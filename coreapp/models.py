@@ -128,7 +128,7 @@ class Equipe(models.Model):
                         pass                     
             except:
                 trials = trials + 1    
-                if trials > 20:
+                if trials > 2000:
                     raise
                 else:
                     self.tag_equipe = SG(iniciais+'[A-Z0-9]{4}').render()
@@ -141,25 +141,21 @@ class Equipe(models.Model):
 
 class TurmasClass(object):
 
-    user_id = None
-
-    def __init__(self, *args, **kw):
-        user_id = None
+    user_id = None   
 
     def get_turmas(user_id: int):
         turmas_from_user = Turma.user.through.objects.filter(user_id=user_id.user_id)
-        result_dict = {'user': user_id.user_id, 'turmas': []}
-        turma_list = []
+        turma_equipe_dict = dict()
+        result_dict = {'user': user_id.user_id, 'turma-equipe': turma_equipe_dict}
         for turma in turmas_from_user:
+            equipes_from_user = Equipe.objects.filter(user__id=user_id.user_id).filter(turma__id=turma.turma_id)
             turma = Turma.objects.get(pk=turma.turma_id)
-            result_dict['turmas'].append(turma.tag_turma)
+            if equipes_from_user:
+                for equipe in equipes_from_user:
+                    turma_equipe_dict[turma.tag_turma] = equipe.tag_equipe
+            else:
+                turma_equipe_dict[turma.tag_turma] = None
         return result_dict
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+    def __init__(self, *args, **kw):
+        user_id = None
