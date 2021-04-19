@@ -13,6 +13,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 
+import yaml
+with open("pblacore/config.yml", 'r') as ymlfile:
+    cfg = yaml.safe_load(ymlfile)
+db_username = cfg['db_creds']['user']
+db_pass = cfg['db_creds']['pass']
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -80,8 +86,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'django-core',
-        'USER': 'django-core',
-        'PASSWORD': 'bola',
+        'USER': db_username,
+        'PASSWORD': db_pass,
         'HOST': 'pbla_db_1',
         'PORT': 5432,
     }
