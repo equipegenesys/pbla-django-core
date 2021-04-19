@@ -102,7 +102,7 @@ class Turma(models.Model):
                     trials = trials + 1
             else:
                 success = True
-    
+
     def __str__(self):
         return f'{self.disciplina.name} - {self.ano}.{self.semestre} - {self.tag_turma}'
 

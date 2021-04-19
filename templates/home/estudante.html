@@ -4,13 +4,13 @@
 <head>
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'coreapp/style.css' %}">
-  <title>PBL Analytics: Integrações</title>
+  <title>PBL Analytics: Área do estudante</title>
 </head>
 
 <body>
   <div class="main-div">
-
-    <h1>Minhas integrações</h1>
+    <h1>Área do estudante</h1>
+    <h3>Minhas integrações</h3>
 
     <p>Olá, <b>{{ current_user_first_name }}</b>! </p>
     <p>Caso a ferramenta não esteja integrada, clique para integrar.</p>
@@ -37,10 +37,12 @@
     <p><i> Ao integrar o Google Drive, caso deseje utilizar uma conta do google com domínio diferente de @gmail.com <br>
         (como as contas @cesar.school), selecione <b>"Usar outra conta"</b> e siga com o processo de autorização.</i>
     </p>
-    {% comment %} {% include 'home/include_turma.html' %} {% endcomment %}
+    {% comment %} {% include lista_das_minhas_turmas %} {% endcomment %}
+    {% include 'home/include_turma.html' %}
   </div>
   <script>
     var status = "{{ g_drive_integ_status }}";
+    var g_drive_integ_link = "{{ g_drive_integ_link | safe }}";
   </script>
   <script src="{% static 'coreapp/coreapp.js' %}">
   </script>

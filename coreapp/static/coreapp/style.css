@@ -33,12 +33,18 @@ h2 {
     border-collapse: collapse;
 }
 
-.integ-tr {
+.integ-tr,
+.object-tr {
     padding-bottom: 1em;
     vertical-align: middle;
     border: 0.5em solid white;
     border-collapse: collapse;
     line-height: 2em;
+}
+
+th {
+    text-align: left;
+    padding-left: 1em;
 }
 
 .integ-tr:hover {
@@ -47,6 +53,11 @@ h2 {
 }
 
 tr.integ-tr>td {
+    padding-left: 1em;
+    padding-right: 1em
+}
+
+tr.object-tr>td {
     padding-left: 1em;
     padding-right: 1em
 }

@@ -1,13 +1,23 @@
 {% block content %}
-<h1>Minhas turmas</h1>
-{% if turmas_do_professor %}
-<ul>
-    {% for turma in turmas_do_professor %}
-    <li>
-        {{ turma }}
-    </li>
-    {% endfor %}
-</ul>
+<h3>Minhas disciplinas</h3>
+{% if turmas_do_estudante %}
+<p>Copie as tags das disciplinas e cole no campo "descrição" dos arquivos do Google Drive que devem ser acompanhados.</p>
+<table class="integ-table">
+    <tbody>
+        <tr class="object-tr">
+            <th> Disciplina </th>
+            <th> Semestre </th>
+            <th> tag </th>
+        </tr>
+        {% for turma in turmas_do_estudante %}
+        <tr class="object-tr">
+            <td>{{ turma.disciplina.name }} </td>
+            <td>{{ turma.ano }}.{{ turma.semestre }}</td>
+            <td>{{ turma.tag_turma }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% else %}
 <p>Você não está matriculado em nenhuma turma.</p>
 {% endif %}
