@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.template import loader
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.list import MultipleObjectMixin
+from django.template.response import TemplateResponse
 
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.decorators import login_required
@@ -20,7 +21,7 @@ from rest_framework import status
 
 from . import gateway
 from .serializers import UserSerializer, GroupSerializer, TurmaSerializer
-from .models import Turma, TurmasClass
+from .models import Turma, TurmasClass, TurmaEquipe
 
 
 class CustomLoginView(contrib_views.LoginView):
@@ -46,8 +47,7 @@ class Professor(PermissionRequiredMixin, TemplateView):
 class Estudante(PermissionRequiredMixin, TemplateView):
     template_name = "home/estudante.html"
     permission_required = ('coreapp.view_myestudante')
-    
-    
+
     def get_context_data(self, **kwargs):
         queryset = Turma.objects.filter(user__id=self.request.user.id)
         current_user_id = self.request.user.id
@@ -63,8 +63,9 @@ class Estudante(PermissionRequiredMixin, TemplateView):
             'g_drive_integ_status': g_drive_integ_status,
             'g_drive_integ_link': g_drive_integ_link,
             'turmas_do_estudante': queryset,
-            }
+        }
         return context
+
 
 class TurmasFromUser(ListView):
 
@@ -129,6 +130,24 @@ class TurmaUserView(APIView):
         myClass = TurmasClass()
         myClass.user_id = user_id
         # print("                   ", myClass.user_id)
-        result = myClass.get_turmas()
+        result = myClass.get_turmas(user_id)
         response = Response(result, status=status.HTTP_200_OK)
+        return response
+
+class RealNames(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request, *args, **kwargs):
+        tag_turma = kwargs.get('tag_turma')
+        tag_equipe = kwargs.get('tag_equipe')
+
+        turma_equipe = TurmaEquipe()
+        
+        if tag_turma != None and tag_equipe == None:
+            result = turma_equipe.get_name(tag_turma=tag_turma)
+        elif tag_turma != None and tag_equipe != None:
+            result = turma_equipe.get_name(tag_turma=tag_turma, tag_equipe=tag_equipe)
+
+        response = Response(result, status=status.HTTP_200_OK)
+        
         return response
