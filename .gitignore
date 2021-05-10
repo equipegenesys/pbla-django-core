@@ -1,8 +1,4 @@
 config.yml
-<<<<<<< HEAD
-.vscode
-=======
->>>>>>> 03161e06915554f2ec02ef3a7ee9a7a690646649
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
