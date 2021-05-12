@@ -3,6 +3,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import views as contrib_views
 from django.urls import reverse
 from django.template import loader
+from django import template
+
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.list import MultipleObjectMixin
 from django.template.response import TemplateResponse
@@ -23,6 +25,7 @@ from . import gateway
 from .serializers import UserSerializer, GroupSerializer, TurmaSerializer
 from .models import Turma, TurmasClass, TurmaEquipe
 
+register = template.Library()
 
 class CustomLoginView(contrib_views.LoginView):
 
@@ -30,7 +33,7 @@ class CustomLoginView(contrib_views.LoginView):
         group_list = self.request.user.groups.values_list('name', flat=True)
         group_list = list(group_list)
         if 'professores' in group_list:
-            return reverse("professor")
+            return reverse("professor_dash")
         elif 'estudantes' in group_list:
             return reverse("estudante")
         else:
@@ -39,10 +42,16 @@ class CustomLoginView(contrib_views.LoginView):
                 return reverse("adm")
 
 
-class Professor(PermissionRequiredMixin, TemplateView):
+class ProfessorDash(PermissionRequiredMixin, TemplateView):
     template_name = "vis/dash.html"
     permission_required = ('coreapp.view_dash')
 
+    def get_context_data(self, **kwargs):
+        tag_turma = self.request.GET.get('turma')
+        tag_equipe = self.request.GET.get('equipe')
+        context = super().get_context_data(**kwargs)
+        context['filter_url'] = f"https://analytics.pbl.tec.br/dash/{tag_turma}/{tag_equipe }"
+        return context
 
 class Estudante(PermissionRequiredMixin, TemplateView):
     template_name = "home/estudante.html"
