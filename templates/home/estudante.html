@@ -24,7 +24,7 @@
     <h1>Área do estudante</h1>
     <h3>Minhas integrações</h3>
 
-    <p>Olá, <b>{{ current_user_first_name }}</b>! </p>
+    {% comment %} <p>Olá, <b>{{ current_user_first_name }}</b>! </p> {% endcomment %}
     <p>Caso a ferramenta não esteja integrada, clique para integrar.</p>
 
     <table class="integ-table">
@@ -46,9 +46,6 @@
       </tbody>
 
     </table>
-    <p><i> Ao integrar o Google Drive, caso deseje utilizar uma conta do google com domínio diferente de @gmail.com <br>
-        (como as contas @cesar.school), selecione <b>"Usar outra conta"</b> e siga com o processo de autorização.</i>
-    </p>
     {% comment %} {% include lista_das_minhas_turmas %} {% endcomment %}
     {% include 'home/include_turma.html' %}
   </div>

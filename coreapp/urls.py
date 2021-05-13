@@ -7,6 +7,7 @@ from . import views, urls_api
 
 urlpatterns = [
     path('home/professor/dash', views.ProfessorDash.as_view(), name='professor_dash'),
+    path('home/professor/turmas', views.TurmasListView.as_view(), name='professor_turmas'),
     path('home/estudante', views.Estudante.as_view(), name='estudante'),
 ]
 

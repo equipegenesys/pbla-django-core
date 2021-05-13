@@ -1,3 +1,4 @@
+from django.db.models.query_utils import Q
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import views as contrib_views
@@ -75,28 +76,24 @@ class Estudante(PermissionRequiredMixin, TemplateView):
         }
         return context
 
+class TurmasListView(PermissionRequiredMixin, TemplateView):
+    template_name = "home/turmas.html"
+    permission_required = ('coreapp.view_dash')
+    
+    def get_context_data(self, **kwargs):
+        queryset = Turma.objects.filter(user__id=self.request.user.id)      
+        context = {
+            'object_list': queryset,
+            'object_count': queryset.count(),
+        }
+        return context
 
-class TurmasFromUser(ListView):
 
-    model = Turma
 
-    context_object_name = 'turmas_do_estudante'
-
-    template_name = 'home/include_turma.html'
-
-    # def get_context_data(self, **kwargs):
-
-    #     context = {
-    #         'current_user_id': self.request.user.id
-    #     }
-
-    #     return context
-
-    # def get_queryset(self):
-
-    #     queryset = Turma.objects.filter(user__id=self.request.user.id)
-
-    #     return queryset
+# class TurmasFromUser(ListView):
+#     model = Turma
+#     context_object_name = 'turmas_do_estudante'
+#     template_name = 'home/include_turma.html'
 
 
 class MyAdmView(PermissionRequiredMixin, TemplateView):
@@ -160,3 +157,7 @@ class RealNames(APIView):
         response = Response(result, status=status.HTTP_200_OK)
         
         return response
+
+
+    
+    

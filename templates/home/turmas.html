@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'coreapp/style.css' %}"
+    />
+    <title>PBL Analytics: Área do professor</title>
+  </head>
+
+  {% block content %}
+  <body>
+    <div class="main-div">
+      <h1>Área do professor</h1>
+      <h3>Minhas turmas</h3>
+      {% if object_list %}
+      <p>Clique nas turmas para ver as equipes.</p>
+      <table class="integ-table">
+        <tbody>
+          <tr class="objects-tr">
+            <th>Disciplina</th>
+            <th>Semestre</th>
+            <th>Tag</th>
+            <th>Índice de colaboração</th>
+          </tr>
+          {% for turma in object_list %}
+          <tr id="row-{{ forloop.counter }}" class="objects-tr">
+            <td>{{ turma.disciplina.name }}</td>
+            <td>{{ turma.ano }}.{{ turma.semestre }}</td>
+            <td>{{ turma.tag_turma }}</td>
+            <td></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p>Você ainda não tem nenhuma turma.</p>
+      {% endif %}
+    </div>
+    <script>
+      var object_count = "{{ object_count }}";
+    </script>
+    <script src="{% static 'coreapp/turmas.js' %}"></script>
+  </body>
+  {% endblock %}
+</html>

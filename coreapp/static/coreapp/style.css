@@ -7,7 +7,7 @@ html {
     /* flex-wrap: wrap; */
     /* justify-content: space-between;
     align-content: stretch; */
-    padding-top: 5vh;
+    /* padding-top: 5vh; */
     padding-left: 5vw;
     /* padding-right: 25%; */
     flex-direction: column;
@@ -19,22 +19,33 @@ h5,
 h6 {
     color: #01579B;
     margin: 0;
+    font-weight: 300;
 }
 
 h1,
 h2 {
     color: #00B0FF;
+    font-weight: 300;
+}
+
+table {
+    font-size: small;
+}
+
+p {
+    font-size: small;
 }
 
 .integ-table {
-    width: 70vh;
+    width: 90vh;
     background-color: whitesmoke;
     border: 1em solid white;
     border-collapse: collapse;
 }
 
 .integ-tr,
-.object-tr {
+.object-tr,
+.objects-tr {
     padding-bottom: 1em;
     vertical-align: middle;
     border: 0.5em solid white;
@@ -52,12 +63,22 @@ th {
     cursor: pointer;
 }
 
+.objects-tr:hover {
+    background-color: rgb(235, 230, 230);
+    cursor: pointer;
+}
+
 tr.integ-tr>td {
     padding-left: 1em;
     padding-right: 1em
 }
 
 tr.object-tr>td {
+    padding-left: 1em;
+    padding-right: 1em
+}
+
+tr.objects-tr>td {
     padding-left: 1em;
     padding-right: 1em
 }
