@@ -3,6 +3,6 @@ for (let i = 1; i <= object_count; i++) {
 
     row.addEventListener("click", () => {
         // console.log(row.cells[2].innerHTML);
-        window.location.replace("turmas/" + row.cells[2].innerHTML + "/equipes");
+        window.location.replace(row.cells[2].innerHTML + "/equipes");
     });
 }

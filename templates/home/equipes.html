@@ -15,22 +15,20 @@
   <body>
     <div class="main-div">
       <h1>Área do professor</h1>
-      <h3>Minhas turmas</h3>
+      <h3><a id="ah3" href="https://analytics.pbl.tec.br/home/professor/turmas">Minhas turmas</a> / {{nome_disciplina}} {{semestre}} / Equipes </h3>
       {% if object_list %}
-      <p>Clique nas turmas para ver as equipes.</p>
+      <p>Clique nas equipes para visualizar dados de sua colaboração.</p>
       <table class="integ-table">
         <tbody>
           <tr class="objects-tr">
-            <th>Nome da disciplina</th>
-            <th>Semestre</th>
+            <th>Nome da equipe</th>
             <th>Tag</th>
             <th>Índice de colaboração</th>
           </tr>
-          {% for turma in object_list %}
+          {% for equipe in object_list %}
           <tr id="row-{{ forloop.counter }}" class="objects-tr">
-            <td>{{ turma.disciplina.name }}</td>
-            <td>{{ turma.ano }}.{{ turma.semestre }}</td>
-            <td>{{ turma.tag_turma }}</td>
+            <td>{{ equipe.name }}</td>
+            <td>{{ equipe.tag_equipe }}</td>
             <td></td>
           </tr>
           {% endfor %}

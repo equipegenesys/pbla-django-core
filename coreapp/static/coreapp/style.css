@@ -22,6 +22,15 @@ h6 {
     font-weight: 300;
 }
 
+#ah3 {
+    text-decoration: none;
+}
+
+#ah3:link,
+#ah3:visited {
+    color: #01579B;
+}
+
 h1,
 h2 {
     color: #00B0FF;

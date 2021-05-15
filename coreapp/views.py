@@ -24,7 +24,7 @@ from rest_framework import status
 
 from . import gateway
 from .serializers import UserSerializer, GroupSerializer, TurmaSerializer
-from .models import Turma, TurmasClass, TurmaEquipe
+from .models import Turma, TurmasClass, TurmaEquipe, Equipe
 
 register = template.Library()
 
@@ -88,7 +88,23 @@ class TurmasListView(PermissionRequiredMixin, TemplateView):
         }
         return context
 
-
+class EquipeListView(PermissionRequiredMixin, TemplateView):
+    template_name = "home/equipes.html"
+    permission_required = ('coreapp.view_dash')
+    
+    def get_context_data(self, **kwargs):
+        tag_turma = kwargs.get('tag_turma')
+        queryset = Equipe.objects.filter(turma=Turma.objects.get(tag_turma=tag_turma))
+        turma_equipe = TurmaEquipe()
+        dados_turma = turma_equipe.get_name(tag_turma=tag_turma)     
+        context = {
+            'object_list': queryset,
+            'object_count': queryset.count(),
+            'tag_turma': tag_turma,
+            'nome_disciplina': dados_turma['Disciplina'],
+            'semestre': dados_turma['Semestre'],
+        }
+        return context
 
 # class TurmasFromUser(ListView):
 #     model = Turma
@@ -143,7 +159,7 @@ class TurmaUserView(APIView):
 class RealNames(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request, *args, **kwargs):
+    def get(self, **kwargs):
         tag_turma = kwargs.get('tag_turma')
         tag_equipe = kwargs.get('tag_equipe')
 
