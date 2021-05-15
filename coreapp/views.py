@@ -34,7 +34,7 @@ class CustomLoginView(contrib_views.LoginView):
         group_list = self.request.user.groups.values_list('name', flat=True)
         group_list = list(group_list)
         if 'professores' in group_list:
-            return reverse("professor_dash")
+            return reverse("professor_turmas")
         elif 'estudantes' in group_list:
             return reverse("estudante")
         else:
