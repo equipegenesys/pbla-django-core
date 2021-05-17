@@ -13,11 +13,17 @@
 
   {% block content %}
   <body>
-    <div class="main-div">
-      <h1>Área do professor</h1>
-      <h3><a id="ah3" href="https://analytics.pbl.tec.br/home/professor/turmas">Minhas turmas</a> / {{nome_disciplina}} {{semestre}} / Equipes </h3>
+    <header>{% include 'home/top_professor.html' %}</header>
+
+    <div class="meta-div">
+      <h2>Equipes</h2>
+      <h5><a id="path" href="https://analytics.pbl.tec.br/home/professor/turmas">Minhas turmas</a> / {{nome_disciplina}} {{semestre}}</h5>
+    </div>
+    <div id="content_data">
       {% if object_list %}
-      <p>Clique nas equipes para visualizar dados de sua colaboração.</p>
+      <p class="hat">
+        Clique nas equipes para visualizar dados de sua colaboração.
+      </p>
       <table class="integ-table">
         <tbody>
           <tr class="objects-tr">
@@ -41,7 +47,7 @@
     <script>
       var object_count = "{{ object_count }}";
     </script>
-    <script src="{% static 'coreapp/turmas.js' %}"></script>
+    <script src="{% static 'coreapp/equipes.js' %}"></script>
   </body>
   {% endblock %}
 </html>

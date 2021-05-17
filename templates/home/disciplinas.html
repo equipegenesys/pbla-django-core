@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html>
+  <!-- Hotjar Tracking Code for https://analytics.pbl.tec.br/ -->
+  {% comment %}
+  <script>
+    (function (h, o, t, j, a, r) {
+      h.hj =
+        h.hj ||
+        function () {
+          (h.hj.q = h.hj.q || []).push(arguments);
+        };
+      h._hjSettings = { hjid: 2360939, hjsv: 6 };
+      a = o.getElementsByTagName("head")[0];
+      r = o.createElement("script");
+      r.async = 1;
+      r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+      a.appendChild(r);
+    })(window, document, "https://static.hotjar.com/c/hotjar-", ".js?sv=");
+  </script>
+  {% endcomment %}
+
+  <head>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'coreapp/style.css' %}"
+    />
+    <title>PBL Analytics: Área do estudante</title>
+  </head>
+
+  <body>
+    <header>{% include 'home/top_estudante.html' %}</header>
+
+    <div class="main-div">
+      <h2>Minhas disciplinas</h2>
+      {% if turmas_do_estudante %}
+      <p>
+        Copie as tags das disciplinas e cole no campo "descrição" dos arquivos
+        do Google Drive que devem ser acompanhados.
+      </p>
+
+      <div id="grande">
+        <table class="integ-table">
+          <tbody>
+            <tr class="object-tr">
+              <th>Disciplina</th>
+              <th>Semestre</th>
+              <th>tag</th>
+            </tr>
+            {% for turma in turmas_do_estudante %}
+            <tr class="object-tr">
+              <td>{{ turma.disciplina.name }}</td>
+              <td>{{ turma.ano }}.{{ turma.semestre }}</td>
+              <td>{{ turma.tag_turma }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p>Você não está matriculado em nenhuma turma.</p>
+      {% endif %}
+    </div>
+    <script>
+      var status = "{{ g_drive_integ_status }}";
+      var g_drive_integ_link = "{{ g_drive_integ_link | safe }}";
+    </script>
+    <script src="{% static 'coreapp/coreapp.js' %}"></script>
+  </body>
+</html>

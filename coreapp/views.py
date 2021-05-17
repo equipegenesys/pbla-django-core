@@ -1,7 +1,8 @@
 from django.db.models.query_utils import Q
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import views as contrib_views
+from django.contrib.auth import logout
 from django.urls import reverse
 from django.template import loader
 from django import template
@@ -36,11 +37,15 @@ class CustomLoginView(contrib_views.LoginView):
         if 'professores' in group_list:
             return reverse("professor_turmas")
         elif 'estudantes' in group_list:
-            return reverse("estudante")
+            return reverse("integra")
         else:
             if self.request.user.is_staff:
                 print("é admin")
                 return reverse("adm")
+
+class CustomLogoutView(contrib_views.LogoutView):
+    def get_success_url(self):
+        return reverse("login")
 
 
 class ProfessorDash(PermissionRequiredMixin, TemplateView):
@@ -48,14 +53,52 @@ class ProfessorDash(PermissionRequiredMixin, TemplateView):
     permission_required = ('coreapp.view_dash')
 
     def get_context_data(self, **kwargs):
-        tag_turma = self.request.GET.get('turma')
-        tag_equipe = self.request.GET.get('equipe')
+        # tag_turma = self.request.GET.get('turma')
+        # tag_equipe = self.request.GET.get('equipe')
+        
+        tag_turma = kwargs.get('tag_turma')
+        tag_equipe = kwargs.get('tag_equipe')
+
+        turma_equipe = TurmaEquipe()
         context = super().get_context_data(**kwargs)
-        context['filter_url'] = f"https://analytics.pbl.tec.br/dash/{tag_turma}/{tag_equipe }"
+        
+        if tag_equipe:
+            dados_turma = turma_equipe.get_name(tag_turma=tag_turma, tag_equipe=tag_equipe)
+            context['nome_equipe'] = dados_turma['Equipe']
+        else:
+            dados_turma = turma_equipe.get_name(tag_turma=tag_turma)
+        
+        context['filter_url'] = f"https://analytics.pbl.tec.br/dash/{tag_turma}/{tag_equipe}"
+        context['nome_disciplina'] = dados_turma['Disciplina']
+        context['semestre'] = dados_turma['Semestre']
+        context['tag_turma'] = tag_turma
+        context['tag_equipe'] = tag_equipe
         return context
 
 class Estudante(PermissionRequiredMixin, TemplateView):
-    template_name = "home/estudante.html"
+    template_name = "home/integra.html"
+    permission_required = ('coreapp.view_myestudante')
+
+    def get_context_data(self, **kwargs):
+        queryset = Turma.objects.filter(user__id=self.request.user.id)
+        current_user_id = self.request.user.id
+        current_user_first_name = self.request.user.first_name
+        if gateway.get_user_gdrive_status(current_user_id):
+            g_drive_integ_status = 'Integrado'
+        else:
+            g_drive_integ_status = 'Não integrado'
+        g_drive_integ_link = gateway.get_gdrive_integ_link(current_user_id)
+        context = {
+            'current_user_id': current_user_id,
+            'current_user_first_name': current_user_first_name,
+            'g_drive_integ_status': g_drive_integ_status,
+            'g_drive_integ_link': g_drive_integ_link,
+            'turmas_do_estudante': queryset,
+        }
+        return context
+    
+class TurmasEstudante(PermissionRequiredMixin, TemplateView):
+    template_name = "home/disciplinas.html"
     permission_required = ('coreapp.view_myestudante')
 
     def get_context_data(self, **kwargs):

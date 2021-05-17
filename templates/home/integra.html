@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html>
+  <!-- Hotjar Tracking Code for https://analytics.pbl.tec.br/ -->
+  {% comment %}
+  <script>
+    (function (h, o, t, j, a, r) {
+      h.hj =
+        h.hj ||
+        function () {
+          (h.hj.q = h.hj.q || []).push(arguments);
+        };
+      h._hjSettings = { hjid: 2360939, hjsv: 6 };
+      a = o.getElementsByTagName("head")[0];
+      r = o.createElement("script");
+      r.async = 1;
+      r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+      a.appendChild(r);
+    })(window, document, "https://static.hotjar.com/c/hotjar-", ".js?sv=");
+  </script>
+  {% endcomment %}
+
+  <head>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'coreapp/style.css' %}"
+    />
+    <title>PBL Analytics: Área do estudante</title>
+  </head>
+
+  <body>
+    <header>{% include 'home/top_estudante.html' %}</header>
+
+    <div class="main-div">
+      <h2>Integrações</h2>
+      {% comment %}
+      <h3>Minhas integrações</h3>
+      {% endcomment %} {% comment %}
+      <p>Olá, <b>{{ current_user_first_name }}</b>!</p>
+      {% endcomment %}
+      <p>Caso a ferramenta não esteja integrada, clique para integrar.</p>
+
+      <table class="integ-table">
+        <tbody>
+          <tr id="row-1" class="integ-tr">
+            <td>Google Drive</td>
+            {% if g_drive_integ_status == "Integrado" %}
+            <td class="integrado">{{ g_drive_integ_status }}</td>
+            {% else %}
+            <td class="not_integrado">{{ g_drive_integ_status }}</td>
+            {% endif %}
+          </tr>
+
+          {% comment %}
+          <tr id="row-2" class="integ-tr">
+            <td>Discord</td>
+            <td class="not_integrado">Indisponível</td>
+          </tr>
+          {% endcomment %}
+        </tbody>
+      </table>
+      {% comment %} {% include lista_das_minhas_turmas %} {% endcomment %}
+    </div>
+    <script>
+      var status = "{{ g_drive_integ_status }}";
+      var g_drive_integ_link = "{{ g_drive_integ_link | safe }}";
+    </script>
+    <script src="{% static 'coreapp/coreapp.js' %}"></script>
+  </body>
+</html>

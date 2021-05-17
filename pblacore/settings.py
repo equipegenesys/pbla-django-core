@@ -145,3 +145,4 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
+LOGOUT_REDIRECT_URL = 'https://analytics.pbl.tec.br/accounts/login'

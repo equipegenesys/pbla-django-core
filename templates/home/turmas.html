@@ -13,11 +13,18 @@
 
   {% block content %}
   <body>
-    <div class="main-div">
+    <header>{% include 'home/top_professor.html' %}</header>
+    <div class="meta-div">
+      {% comment %}
       <h1>Área do professor</h1>
-      <h3>Minhas turmas</h3>
-      {% if object_list %}
+      {% endcomment %}
+      <h2>Minhas turmas</h2>
+      <h5>CESAR School</h5>
+    </div>
+    <div id="content_data">
       <p>Clique nas turmas para ver as equipes.</p>
+
+      {% if object_list %}
       <table class="integ-table">
         <tbody>
           <tr class="objects-tr">

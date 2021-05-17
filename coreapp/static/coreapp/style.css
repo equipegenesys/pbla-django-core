@@ -1,16 +1,121 @@
 html {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif;
+    /* width: 100vw;
+    height: 100%;
+    margin: 0;
+    padding: 0; */
 }
 
-.main-div {
+
+/* body {
     display: flex;
-    /* flex-wrap: wrap; */
-    /* justify-content: space-between;
-    align-content: stretch; */
-    /* padding-top: 5vh; */
-    padding-left: 5vw;
-    /* padding-right: 25%; */
     flex-direction: column;
+    justify-content: center;
+    align-content: flex-start;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+} */
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.top-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 5vw;
+    padding-right: 4vw;
+    height: 9vh;
+    background-color: whitesmoke;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+#logo {
+    height: 45%;
+    margin-left: -9px;
+}
+
+#top-buttons {
+    /* width: 70px; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.link-button {
+    padding-left: 1em;
+    padding-right: 1em;
+    height: 2.5em;
+    margin-left: 1em;
+    border: none;
+    background-color: whitesmoke;
+    color: #01579B;
+}
+
+.link-button:hover {
+    background-color: rgb(235, 230, 230);
+    cursor: pointer;
+}
+
+.solid-button {
+    height: 2.5em;
+    width: 4em;
+    margin-left: 2em;
+    color: white;
+    background-color: #00B0FF;
+    border: none;
+}
+
+.solid-button:hover {
+    background-color: #009ae1;
+    cursor: pointer;
+}
+
+.meta-div {
+    position: fixed;
+    display: flex;
+    top: 9vh;
+    left: 0;
+    right: 0;
+    height: 15vh;
+    padding-left: 5vw;
+    padding-right: 5vw;
+    padding-top: 2vh;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.dash_iframe {
+    /* min-height: max-content; */
+    flex-grow: 1;
+    border: none;
+    margin: 0;
+    margin-top: 15;
+    padding: 0;
+}
+
+#content_data {
+    position: fixed;
+    display: flex;
+    top: 24vh;
+    left: 0;
+    right: 0;
+    height: 76vh;
+    padding-left: 5vw;
+    /* padding-right: 5vw; */
+    padding-top: 2vh;
+    flex-direction: column;
+    overflow: auto;
 }
 
 h3,
@@ -22,12 +127,15 @@ h6 {
     font-weight: 300;
 }
 
-#ah3 {
-    text-decoration: none;
+#path {
+    text-decoration: underline;
+    /* margin-top: 200px; */
+    /* margin-top: -10em; */
+    /* padding-top: ; */
 }
 
-#ah3:link,
-#ah3:visited {
+#path:link,
+#path:visited {
     color: #01579B;
 }
 
@@ -35,6 +143,12 @@ h1,
 h2 {
     color: #00B0FF;
     font-weight: 300;
+    margin-bottom: 0.5em;
+}
+
+.hat {
+    /* color: grey; */
+    margin-top: 3em;
 }
 
 table {
@@ -43,6 +157,10 @@ table {
 
 p {
     font-size: small;
+}
+
+#grande {
+    padding-bottom: 2000px;
 }
 
 .integ-table {
@@ -59,7 +177,7 @@ p {
     vertical-align: middle;
     border: 0.5em solid white;
     border-collapse: collapse;
-    line-height: 2em;
+    line-height: 2.6em;
 }
 
 th {
@@ -98,4 +216,57 @@ tr.objects-tr>td {
 
 .not_integrado {
     color: grey;
+}
+
+#body-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: whitesmoke;
+}
+
+#login-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 30vh;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-top: 2em;
+    padding-bottom: 1em;
+    position: fixed;
+    background-color: white;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+#logo-login {
+    /* width: 30vh; */
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin-bottom: 2em;
+    /* remove extra space below image */
+}
+
+.login-button {
+    float: right;
+    height: 2.5em;
+    width: 4em;
+    margin-top: 1em;
+    color: white;
+    background-color: whitesmoke;
+    border: none;
+    color: #01579B;
+    margin-right: 1em;
+}
+
+.login-button:hover {
+    background-color: rgb(235, 230, 230);
+    cursor: pointer;
+}
+
+#login-form {
+    height: 2em;
 }

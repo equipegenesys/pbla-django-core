@@ -1,6 +1,21 @@
 <!-- templates/registration/login.html -->
-<h2>Log In</h2>
-<form method="post">
-    {% csrf_token %} {{ form.as_p }}
-    <button type="submit">Log In</button>
-</form>
+{% load static %}
+<html>
+
+<head>
+    <link rel="stylesheet" href="{% static 'coreapp/style.css'%}">
+    </link>
+</head>
+
+<body id="body-login">
+  <div id="login-div">
+    <img id="logo-login" src="{% static 'coreapp/img/pbllogo_croped.png' %}" />
+    {% comment %} <h2>Log In</h2> {% endcomment %}
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <button class="login-button" type="submit">Log In</button>
+    </form>
+  </div>
+</body>
+
+</html>
