@@ -31,16 +31,15 @@
   </head>
 
   <body>
-    <header>{% include 'home/top_estudante.html' %}</header>
-
     <div class="main-div">
+
+    <header>{% include 'home/top_estudante.html' %}</header>
+    <div class="meta-div">      
       <h2>Integrações</h2>
-      {% comment %}
-      <h3>Minhas integrações</h3>
-      {% endcomment %} {% comment %}
-      <p>Olá, <b>{{ current_user_first_name }}</b>!</p>
-      {% endcomment %}
-      <p>Caso a ferramenta não esteja integrada, clique para integrar.</p>
+      <div>
+          <div id="content_data">
+
+      <p id="bra">Caso a ferramenta não esteja integrada, clique para integrar.</p>
 
       <table class="integ-table">
         <tbody>
@@ -52,16 +51,9 @@
             <td class="not_integrado">{{ g_drive_integ_status }}</td>
             {% endif %}
           </tr>
-
-          {% comment %}
-          <tr id="row-2" class="integ-tr">
-            <td>Discord</td>
-            <td class="not_integrado">Indisponível</td>
-          </tr>
-          {% endcomment %}
         </tbody>
       </table>
-      {% comment %} {% include lista_das_minhas_turmas %} {% endcomment %}
+      </div>
     </div>
     <script>
       var status = "{{ g_drive_integ_status }}";

@@ -8,16 +8,20 @@ html {
 
 
 /* body {
+
+} */
+
+.main-div {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-content: flex-start;
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
     overflow: hidden;
-} */
+}
 
 header {
     position: fixed;
@@ -87,7 +91,7 @@ header {
     top: 9vh;
     left: 0;
     right: 0;
-    height: 15vh;
+    height: 11vh;
     padding-left: 5vw;
     padding-right: 5vw;
     padding-top: 2vh;
@@ -95,27 +99,27 @@ header {
     overflow: auto;
 }
 
-.dash_iframe {
-    /* min-height: max-content; */
-    flex-grow: 1;
-    border: none;
-    margin: 0;
-    margin-top: 15;
-    padding: 0;
-}
-
 #content_data {
     position: fixed;
     display: flex;
-    top: 24vh;
+    top: 22vh;
     left: 0;
     right: 0;
-    height: 76vh;
+    height: 78vh;
     padding-left: 5vw;
-    /* padding-right: 5vw; */
-    padding-top: 2vh;
+    padding-right: 4vw;
+    /* padding-top: 2vh; */
     flex-direction: column;
     overflow: auto;
+}
+
+.dash_iframe {
+    /* min-height: max-content; */
+    /* flex-grow: 1; */
+    border: none;
+    margin: 0;
+    /* margin-top: 15; */
+    padding: 0;
 }
 
 h3,
@@ -146,21 +150,12 @@ h2 {
     margin-bottom: 0.5em;
 }
 
-.hat {
-    /* color: grey; */
-    margin-top: 3em;
-}
-
 table {
     font-size: small;
 }
 
 p {
     font-size: small;
-}
-
-#grande {
-    padding-bottom: 2000px;
 }
 
 .integ-table {
@@ -269,4 +264,9 @@ tr.objects-tr>td {
 
 #login-form {
     height: 2em;
+}
+
+#bra {
+    margin-block-start: 0;
+    margin-block-end: 1em;
 }

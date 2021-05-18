@@ -5,16 +5,17 @@
 <html>
   <head>
     {% load static %}
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'coreapp/style.css' %}"
-    />
+      <link
+        rel="stylesheet"
+        type="text/css"
+        href="{% static 'coreapp/style.css' %}"
+      />
     <title>PBL Analytics: Área do professor</title>
   </head>
 
   {% block content %}
   <body>
+  <div class="main-div"> 
      <header>{% include 'home/top_professor.html' %}</header>
     <div class="meta-div">
       {% comment %} <h5 class="hat">Equipe</h5> {% endcomment %}
@@ -33,6 +34,7 @@
       var object_count = "{{ object_count }}";
     </script>
     <script src="{% static 'coreapp/equipes.js' %}"></script>
+    </div>
   </body>
   {% endblock %}
 </html>

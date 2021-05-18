@@ -13,6 +13,8 @@
 
   {% block content %}
   <body>
+    <div class="main-div"> 
+
     <header>{% include 'home/top_professor.html' %}</header>
     <div class="meta-div">
       {% comment %}
@@ -22,7 +24,7 @@
       <h5>CESAR School</h5>
     </div>
     <div id="content_data">
-      <p>Clique nas turmas para ver as equipes.</p>
+      <p id="bra">Clique nas turmas para ver as equipes.</p>
 
       {% if object_list %}
       <table class="integ-table">
@@ -51,6 +53,7 @@
       var object_count = "{{ object_count }}";
     </script>
     <script src="{% static 'coreapp/turmas.js' %}"></script>
+    </div>
   </body>
   {% endblock %}
 </html>

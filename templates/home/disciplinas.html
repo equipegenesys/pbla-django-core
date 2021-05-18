@@ -31,17 +31,20 @@
   </head>
 
   <body>
-    <header>{% include 'home/top_estudante.html' %}</header>
 
     <div class="main-div">
+    <header>{% include 'home/top_estudante.html' %}</header>
+    <div class="meta-div">
       <h2>Minhas disciplinas</h2>
+    </div>
       {% if turmas_do_estudante %}
-      <p>
-        Copie as tags das disciplinas e cole no campo "descrição" dos arquivos
-        do Google Drive que devem ser acompanhados.
-      </p>
 
-      <div id="grande">
+
+      <div id="content_data">
+            <p id="bra">
+            Copie as tags das disciplinas e cole no campo "descrição" dos arquivos
+            do Google Drive que devem ser acompanhados.
+            </p>
         <table class="integ-table">
           <tbody>
             <tr class="object-tr">
@@ -58,6 +61,7 @@
             {% endfor %}
           </tbody>
         </table>
+        </div>
       </div>
       {% else %}
       <p>Você não está matriculado em nenhuma turma.</p>

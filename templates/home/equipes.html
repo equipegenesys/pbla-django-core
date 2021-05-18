@@ -13,6 +13,8 @@
 
   {% block content %}
   <body>
+    <div class="main-div"> 
+
     <header>{% include 'home/top_professor.html' %}</header>
 
     <div class="meta-div">
@@ -21,7 +23,7 @@
     </div>
     <div id="content_data">
       {% if object_list %}
-      <p class="hat">
+      <p id="bra">
         Clique nas equipes para visualizar dados de sua colaboração.
       </p>
       <table class="integ-table">
@@ -49,5 +51,6 @@
     </script>
     <script src="{% static 'coreapp/equipes.js' %}"></script>
   </body>
+  </div>
   {% endblock %}
 </html>
