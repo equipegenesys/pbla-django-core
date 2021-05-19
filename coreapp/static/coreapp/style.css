@@ -91,21 +91,22 @@ header {
     top: 9vh;
     left: 0;
     right: 0;
-    height: 11vh;
+    height: 10vh;
     padding-left: 5vw;
     padding-right: 5vw;
-    padding-top: 2vh;
+    padding-top: 1.5em;
     flex-direction: column;
-    overflow: auto;
+    overflow: hidden;
 }
 
 #content_data {
     position: fixed;
     display: flex;
-    top: 22vh;
+    top: 19vh;
     left: 0;
     right: 0;
-    height: 78vh;
+    height: 80vh;
+    padding-top: 1hv;
     padding-left: 5vw;
     padding-right: 4vw;
     /* padding-top: 2vh; */
@@ -147,7 +148,7 @@ h1,
 h2 {
     color: #00B0FF;
     font-weight: 300;
-    margin-bottom: 0.5em;
+    margin-top: 0.3em;
 }
 
 table {
