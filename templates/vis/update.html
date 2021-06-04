@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 
 <html>
@@ -22,18 +20,22 @@
       <h5><a id="path" href="https://analytics.pbl.tec.br/professor/turmas">Minhas turmas</a> / <a id="path" href="https://analytics.pbl.tec.br/professor/turmas/{{ tag_turma }}/equipes/">Equipes de {{nome_disciplina}} {{semestre}}</a> / Dashboard</h5>
         <h1>Equipe {{nome_equipe}}</h1>
       </div>
-      <div id="content_data">
+      <div id="loading_data">
       {% comment %} {% if object_list %} {% endcomment %}
         {% comment %} <iframe height="100%" width="100%" frameBorder="0" src={{ filter_url }}></iframe> {% endcomment %}
-        <iframe class="dash_iframe" height="100%" width="100%" src={{ filter_url }}></iframe>
+        <div id="loadit">
+        <h3 id="loader_text">Atualizando dados</h3>
+         <img id="loader" src="{% static 'coreapp/img/loader2.gif' %}" />
+         </div>
       {% comment %} {% else %} {% endcomment %}
         {% comment %} <p>Você ainda não tem nenhuma turma.</p> {% endcomment %}
       {% comment %} {% endif %} {% endcomment %}
     </div>
     <script>
-      var object_count = "{{ object_count }}";
+      var user_list = {{ user_list }};
+      var dash_view_url = "{{ dash_view_url }}";
     </script>
-    <script src="{% static 'coreapp/equipes.js' %}"></script>
+    <script src="{% static 'coreapp/update_data.js' %}"></script>
     </div>
   </body>
   {% endblock %}

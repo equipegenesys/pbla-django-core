@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from .models import Turma
+from .models import Equipe, Turma
 from rest_framework import serializers
 
 
@@ -19,6 +19,11 @@ class TurmaSerializer(serializers.ModelSerializer):
         model = Turma
         fields = ['tag_turma', 'user']
         # list_serializer_class = TurmaUserSerializer
+
+class IntegrantesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Equipe
+        fields = ['user']
 
 # class TurmaUserSerializer(serializers.ListSerializer):
 #     class Meta:

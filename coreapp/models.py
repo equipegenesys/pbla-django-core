@@ -144,7 +144,7 @@ class Equipe(models.Model):
                 if trials > 2000:
                     raise
                 else:
-                    self.tag_equipe = SG(iniciais+'[A-Z0-9]{4}').render()
+                    self.tag_equipe = SG('[A-Z0-9]{4}').render()
             else:
                 success = True
 
@@ -194,7 +194,7 @@ class TurmaEquipe(object):
             equipe = Equipe.objects.get(tag_equipe=tag_equipe)
             turma_equipe_dict['Equipe'] = equipe.name
 
-        print(turma_equipe_dict)
+        # print(turma_equipe_dict)
 
         return turma_equipe_dict
 

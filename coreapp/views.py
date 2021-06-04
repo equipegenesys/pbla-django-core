@@ -6,6 +6,7 @@ from django.contrib.auth import logout
 from django.urls import reverse
 from django.template import loader
 from django import template
+import asyncio
 
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.list import MultipleObjectMixin
@@ -24,8 +25,15 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from . import gateway
-from .serializers import UserSerializer, GroupSerializer, TurmaSerializer
+from .serializers import UserSerializer, GroupSerializer, TurmaSerializer, IntegrantesSerializer
 from .models import Turma, TurmasClass, TurmaEquipe, Equipe
+
+from multiprocessing import Pool
+from threading import Thread
+
+from asgiref.sync import sync_to_async
+
+# pool = Pool(4)
 
 register = template.Library()
 
@@ -48,16 +56,93 @@ class CustomLogoutView(contrib_views.LogoutView):
         return reverse("login")
 
 
-class ProfessorDash(PermissionRequiredMixin, TemplateView):
-    template_name = "vis/dash.html"
+
+# async def UpdateDataView(request, tag_turma, tag_equipe):
+#     template_name = 'vis/update.html'
+    
+#     # print(tag_turma, tag_equipe)
+    
+#     user_list = []
+#     # users = User.objects.filter(equipe__tag_equipe=tag_equipe)
+
+#     users = await sync_to_async(list)(User.objects.filter(equipe__tag_equipe=tag_equipe))
+#     # print(users)
+    
+#     for user in users:
+#         user_list.append(user.id)
+#     print("           user_list:", user_list)
+    
+#     results  = await asyncio.gather(gateway.update_gdrive_records(user_list))
+
+#     print(results)
+    
+#     return render(request, template_name)
+
+
+class UpdateDataView(PermissionRequiredMixin, TemplateView):
+    template_name = "vis/update.html"
     permission_required = ('coreapp.view_dash')
 
     def get_context_data(self, **kwargs):
+        
+        tag_turma = kwargs.get('tag_turma')
+        tag_equipe = kwargs.get('tag_equipe')
+        
+        turma_equipe = TurmaEquipe()
+        context = super().get_context_data(**kwargs)
+
+
+        user_list = []
+        users = User.objects.filter(equipe__tag_equipe=tag_equipe)
+        for user in users:
+            user_list.append(user.id)
+        
+        if tag_equipe:
+            dados_turma = turma_equipe.get_name(tag_turma=tag_turma, tag_equipe=tag_equipe)
+            context['nome_equipe'] = dados_turma['Equipe']
+        else:
+            dados_turma = turma_equipe.get_name(tag_turma=tag_turma)
+        
+        context['dash_view_url'] = f"https://analytics.pbl.tec.br/professor/turmas/{tag_turma}/equipes/{tag_equipe}/"
+        context['nome_disciplina'] = dados_turma['Disciplina']
+        context['semestre'] = dados_turma['Semestre']
+        context['tag_turma'] = tag_turma
+        context['tag_equipe'] = tag_equipe
+        context['user_list'] = user_list
+        context['user_count'] = len(user_list)
+        print(context)
+        return context
+
+
+class ProfessorDash(PermissionRequiredMixin, TemplateView):
+    template_name = "vis/dash.html"
+    permission_required = ('coreapp.view_dash')
+    # print(django.VERSION)
+
+    def get_context_data(self, **kwargs):
+
         # tag_turma = self.request.GET.get('turma')
         # tag_equipe = self.request.GET.get('equipe')
         
         tag_turma = kwargs.get('tag_turma')
         tag_equipe = kwargs.get('tag_equipe')
+
+
+
+        
+        # users = User.objects.filter(equipe__tag_equipe=tag_equipe)
+        # t = Thread(target=gateway.update_gdrive_records, args=(users, ))
+        # t.start()
+        # print("this will be printed immediately")
+
+        # if t.is_alive():
+        #     updating_data = True
+        #     print(updating_data)
+        # else:
+        #     updating_data = False
+        #     print(updating_data)
+            
+
 
         turma_equipe = TurmaEquipe()
         context = super().get_context_data(**kwargs)
@@ -73,6 +158,7 @@ class ProfessorDash(PermissionRequiredMixin, TemplateView):
         context['semestre'] = dados_turma['Semestre']
         context['tag_turma'] = tag_turma
         context['tag_equipe'] = tag_equipe
+        # context['updating_data'] = updating_data
         return context
 
 class Estudante(PermissionRequiredMixin, TemplateView):
@@ -88,6 +174,7 @@ class Estudante(PermissionRequiredMixin, TemplateView):
         else:
             g_drive_integ_status = 'Não integrado'
         g_drive_integ_link = gateway.get_gdrive_integ_link(current_user_id)
+        # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", g_drive_integ_link)
         context = {
             'current_user_id': current_user_id,
             'current_user_first_name': current_user_first_name,
@@ -146,6 +233,7 @@ class EquipeListView(PermissionRequiredMixin, TemplateView):
             'tag_turma': tag_turma,
             'nome_disciplina': dados_turma['Disciplina'],
             'semestre': dados_turma['Semestre'],
+            'base_url': f'https://analytics.pbl.tec.br/professor/update/turmas/{tag_turma}/equipes/'
         }
         return context
 
@@ -199,10 +287,20 @@ class TurmaUserView(APIView):
         response = Response(result, status=status.HTTP_200_OK)
         return response
 
+class UsersEquipeView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request, **kwargs):
+        tag_equipe = kwargs.get('tag_equipe')
+        queryset = Equipe.objects.get(tag_equipe=tag_equipe)
+        serializer = IntegrantesSerializer(queryset)
+        response = Response(serializer.data, status=status.HTTP_200_OK)
+        return response
+
 class RealNames(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, **kwargs):
+    def get(self, request, **kwargs):
         tag_turma = kwargs.get('tag_turma')
         tag_equipe = kwargs.get('tag_equipe')
 

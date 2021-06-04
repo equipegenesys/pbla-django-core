@@ -1,7 +1,7 @@
 from django.urls import path, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
-from .views import UserViewSet, GroupViewSet, TurmaViewSet, TurmaUserView, RealNames
+from .views import UserViewSet, GroupViewSet, UsersEquipeView, TurmaUserView, RealNames
 
 # # Serializers define the API representation.
 # class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -29,4 +29,5 @@ urlpatterns = [
     path('api/core/turmas/user/<int:id>/', TurmaUserView.as_view()),
     path('api/core/turmas/names/<str:tag_turma>/', RealNames.as_view()),
     path('api/core/turmas/names/<str:tag_turma>/<str:tag_equipe>/', RealNames.as_view()),
+    path('api/core/equipe/<str:tag_equipe>/users/', UsersEquipeView.as_view())
     ]
