@@ -8,3 +8,4 @@ django-filter
 requests
 PyYAML
 httpx
+django-form-utils

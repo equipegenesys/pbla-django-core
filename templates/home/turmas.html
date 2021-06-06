@@ -13,46 +13,45 @@
 
   {% block content %}
   <body>
-    <div class="main-div"> 
+    <div class="main-div">
+      <header>{% include 'home/top_professor.html' %}</header>
+      <div class="meta-div">
+        {% comment %}
+        <h1>Área do professor</h1>
+        {% endcomment %}
+        <h5>CESAR School</h5>
+        <h1>Minhas turmas</h1>
+      </div>
+      <div id="content_data">
+        <p id="bra">Clique nas turmas para ver as equipes.</p>
 
-    <header>{% include 'home/top_professor.html' %}</header>
-    <div class="meta-div">
-      {% comment %}
-      <h1>Área do professor</h1>
-      {% endcomment %}
-      <h5>CESAR School</h5>
-      <h1>Minhas turmas</h1>
-    </div>
-    <div id="content_data">
-      <p id="bra">Clique nas turmas para ver as equipes.</p>
-
-      {% if object_list %}
-      <table class="integ-table">
-        <tbody>
-          <tr class="objects-tr">
-            <th>Nome da disciplina</th>
-            <th>Semestre</th>
-            <th>Tag</th>
-            <th>Índice de colaboração</th>
-          </tr>
-          {% for turma in object_list %}
-          <tr id="row-{{ forloop.counter }}" class="objects-tr">
-            <td>{{ turma.disciplina.name }}</td>
-            <td>{{ turma.ano }}.{{ turma.semestre }}</td>
-            <td>{{ turma.tag_turma }}</td>
-            <td></td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <p>Você ainda não tem nenhuma turma.</p>
-      {% endif %}
-    </div>
-    <script>
-      var object_count = "{{ object_count }}";
-    </script>
-    <script src="{% static 'coreapp/turmas.js' %}"></script>
+        {% if object_list %}
+        <table class="integ-table">
+          <tbody>
+            <tr class="objects-tr">
+              <th>Nome da disciplina</th>
+              <th>Semestre</th>
+              <th>Tag</th>
+              <th>Índice de colaboração</th>
+            </tr>
+            {% for turma in object_list %}
+            <tr id="row-{{ forloop.counter }}" class="objects-tr">
+              <td>{{ turma.disciplina.name }}</td>
+              <td>{{ turma.ano }}.{{ turma.semestre }}</td>
+              <td>{{ turma.tag_turma }}</td>
+              <td></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p>Você ainda não tem nenhuma turma.</p>
+        {% endif %}
+      </div>
+      <script>
+        var object_count = "{{ object_count }}";
+      </script>
+      <script src="{% static 'coreapp/turmas.js' %}"></script>
     </div>
   </body>
   {% endblock %}

@@ -1,7 +1,7 @@
 from django.urls import path
-from django.contrib.auth.models import User
-from django.contrib.auth import views as contrib_views
-from django.conf.urls import include
+# from django.contrib.auth.models import User
+# from django.contrib.auth import views as contrib_views
+# from django.conf.urls import include
 # from pblacore import urls as pblacoreurls
 from . import views, urls_api
 
@@ -18,7 +18,7 @@ urlpatterns = [
 urlpatterns += [
     path('accounts/login/', views.CustomLoginView.as_view(), name='login'),
     path('accounts/logout/', views.CustomLogoutView.as_view(), name='logout'),
-    path('home/adm', views.MyAdmView.as_view(), name='adm'),
+    # path('home/adm', views.MyAdmView.as_view(), name='adm'),
 ]
 
 urlpatterns += urls_api.urlpatterns
