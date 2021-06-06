@@ -31,12 +31,14 @@
         {% comment %} <p>Você ainda não tem nenhuma turma.</p> {% endcomment %}
       {% comment %} {% endif %} {% endcomment %}
     </div>
-    <script>
+  </div>
+  </body>
+      <script>
       var user_list = {{ user_list }};
       var dash_view_url = "{{ dash_view_url }}";
+      var tag_equipe = "{{ tag_equipe }}";
+
     </script>
     <script src="{% static 'coreapp/update_data.js' %}"></script>
-    </div>
-  </body>
   {% endblock %}
 </html>
