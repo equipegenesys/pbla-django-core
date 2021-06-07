@@ -12,7 +12,9 @@ urlpatterns = [
     path('estudante/disciplinas', views.TurmasEstudante.as_view(), name='disciplinas'),
     path('professor/turmas/<str:tag_turma>/equipes/', views.EquipeListView.as_view(), name='professor_equipes'),
     path('professor/turmas/<str:tag_turma>/equipes/<str:tag_equipe>/', views.ProfessorDash.as_view(), name='professor_dash'),
-    path('professor/update/turmas/<str:tag_turma>/equipes/<str:tag_equipe>/', views.UpdateDataView.as_view(), name='update_data')
+    path('professor/update/turmas/<str:tag_turma>/equipes/<str:tag_equipe>/', views.UpdateDataView.as_view(), name='update_data'),
+    path("people/", views.PersonListView.as_view())
+
 ]
 
 urlpatterns += [

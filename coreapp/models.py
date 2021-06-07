@@ -1,13 +1,17 @@
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 from django.db import transaction
 from strgen import StringGenerator as SG
 from string import ascii_uppercase as alphabet
+from django.contrib.auth.models import User, Group, AbstractUser
 
 # from django.contrib.auth.models import AbstractUser
 
+# class ExtendedUser(AbstractUser):
+#     pass
+    # first_name = models.Field(verbose_name = "Nome")
 
 class Dash(models.Model):
     pass

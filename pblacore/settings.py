@@ -35,6 +35,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['analytics.pbl.tec.br', 'dash', 'pbla_core_1', '172.22.0.8']
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -60,6 +61,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'pblacore.urls'
+
+# AUTH_USER_MODEL = 'coreapp.ExtendedUser'
+
 
 TEMPLATES = [
     {

@@ -2,11 +2,14 @@ from django.db.models.query_utils import Q
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import views as contrib_views
+# from django.contrib.auth.models import User as BuiltInUser
 from django.contrib.auth import logout
 from django.urls import reverse
 from django.template import loader
 from django import template
-import asyncio
+
+from django_tables2 import SingleTableView
+from .tables import PersonTable
 
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.list import MultipleObjectMixin
@@ -241,6 +244,18 @@ class EquipeListView(PermissionRequiredMixin, TemplateView):
 #     model = Turma
 #     context_object_name = 'turmas_do_estudante'
 #     template_name = 'home/include_turma.html'
+
+
+
+
+# tutorial/views.py
+class PersonListView(SingleTableView):
+    model = User
+    table_class = PersonTable
+    template_name = 'home/people.html'
+
+
+
 
 
 class MyAdmView(PermissionRequiredMixin, TemplateView):
