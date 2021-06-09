@@ -8,6 +8,6 @@ for (let i = 1; i <= object_count; i++) {
     const path = subpath + "/" + id;
     row.addEventListener("click", () => {
         // console.log(path)
-        window.location.replace(path);
+        window.location.assign(path);
     })
 }
