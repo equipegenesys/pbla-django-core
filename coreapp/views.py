@@ -256,6 +256,8 @@ class InstituicaoListView(SingleTableView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Instituições'
+        context['subpath'] = 'instituicoes'
+        context['object_count'] = len(self.model.objects.values_list())
         return context
 class InstituicaoDetalheView(DetailView):
     model = Instituicao
@@ -283,6 +285,8 @@ class CursoListView(SingleTableView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Cursos'
+        context['subpath'] = 'cursos'
+        context['object_count'] = len(self.model.objects.values_list())
         return context
 class CursoDetalheView(DetailView):
     model = Curso
@@ -304,6 +308,8 @@ class DisciplinaListView(SingleTableView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Disciplinas'
+        context['subpath'] = 'disciplinas'
+        context['object_count'] = len(self.model.objects.values_list())
         return context
 class DisciplinaDetalheView(DetailView):
     model = Disciplina
@@ -326,6 +332,8 @@ class TurmaListView(SingleTableView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Turmas'
+        context['subpath'] = 'turmas'
+        context['object_count'] = len(self.model.objects.values_list())
         return context
 class TurmaDetalheView(DetailView):
     model = Turma
@@ -347,6 +355,8 @@ class EquipeListView(SingleTableView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Equipes'
+        context['subpath'] = 'equipes'
+        context['object_count'] = len(self.model.objects.values_list())
         return context
 class EquipeDetalheView(DetailView):
     model = Equipe
@@ -369,6 +379,8 @@ class PersonListView(SingleTableView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Pessoas'
+        context['subpath'] = 'pessoas'
+        context['object_count'] = len(self.model.objects.values_list())
         return context
 class PessoaDetalheView(DetailView):
     model = Pessoa

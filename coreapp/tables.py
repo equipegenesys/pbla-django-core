@@ -2,6 +2,8 @@
 import django_tables2 as tables
 from django.contrib.auth.models import User, Group
 from . import models
+from django_tables2.utils import A 
+
 # from .models import ExtendedUser
 
 
@@ -14,9 +16,11 @@ class InstituicaoTable(tables.Table):
         fields = ("id", "name", )
         attrs = {"class": "table table-hover"}
         row_attrs = {
-            'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
             'class': 'hover-class'
         }
+    
+    # def get_pk(self, pk: int):
+    #     return pk
 
 class CursoTable(tables.Table):
     # first_name = tables.LinkColumn('pessoas', empty_values=())  # not in meta
@@ -27,7 +31,7 @@ class CursoTable(tables.Table):
         fields = ("id", "instituicao", "name", "nivel" )
         attrs = {"class": "table table-hover"}
         row_attrs = {
-            'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
+            # 'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
             'class': 'hover-class'
         }
 
@@ -40,7 +44,7 @@ class PersonTable(tables.Table):
         fields = ("id", "first_name", "last_name", "email", "is_staff", )
         attrs = {"class": "table table-hover"}
         row_attrs = {
-            'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
+            # 'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
             'class': 'hover-class'
         }
 
@@ -53,7 +57,7 @@ class TurmaTable(tables.Table):
         fields = ("id", "disciplina", "ano", "semestre", "tag_turma")
         attrs = {"class": "table table-hover"}
         row_attrs = {
-            'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
+            # 'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
             'class': 'hover-class'
         }
 
@@ -66,7 +70,7 @@ class DisciplinaTable(tables.Table):
         fields = ("id", "curso", "name", "tag_disciplina")
         attrs = {"class": "table table-hover"}
         row_attrs = {
-            'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
+            # 'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
             'class': 'hover-class'
         }
 
@@ -79,6 +83,6 @@ class EquipeTable(tables.Table):
         fields = ("id", "tag_equipe", "user")
         attrs = {"class": "table table-hover"}
         row_attrs = {
-            'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
+            # 'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
             'class': 'hover-class'
         }
