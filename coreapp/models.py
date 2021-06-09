@@ -6,12 +6,32 @@ from django.db import transaction
 from strgen import StringGenerator as SG
 from string import ascii_uppercase as alphabet
 from django.contrib.auth.models import User, Group, AbstractUser
+# from .managers import PersonManager
 
 # from django.contrib.auth.models import AbstractUser
 
 # class ExtendedUser(AbstractUser):
 #     pass
     # first_name = models.Field(verbose_name = "Nome")
+
+class Pessoa(User):
+    # objects = PersonManager()
+
+    class Meta:
+        proxy = True
+        ordering = ('first_name', )
+
+    def get_fields(self):
+        list_of_fields = [(field.name, field.value_to_string(self)) for field in Pessoa._meta.fields]
+        partial_list = list()
+        
+        for i in list_of_fields:
+            if i[0] != 'password' and i[0] != 'id':
+                partial_list.append(i)
+
+        order = [3, 4, 5, 2, 0, 8, 1, 6, 7]
+        partial_list = [partial_list[i] for i in order]
+        return partial_list
 
 class Dash(models.Model):
     pass
@@ -29,6 +49,10 @@ class Instituicao(models.Model):
     name = models.CharField(max_length=300)
     # pub_date = models.DateTimeField('date published')
 
+    def get_fields(self):
+        list_of_fields = [(field.name, field.value_to_string(self)) for field in Instituicao._meta.fields]
+        return list_of_fields
+
     def __str__(self):
         return self.name
 
@@ -37,6 +61,10 @@ class Curso(models.Model):
     instituicao = models.ForeignKey(Instituicao, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     nivel = models.CharField(max_length=200)
+
+    def get_fields(self):
+        list_of_fields = [(field.name, field.value_to_string(self)) for field in Curso._meta.fields]
+        return list_of_fields
 
     def __str__(self):
         return f'{self.nivel} - {self.name}'
@@ -85,6 +113,10 @@ class Disciplina(models.Model):
             else:
                 success = True
 
+    def get_fields(self):
+        list_of_fields = [(field.name, field.value_to_string(self)) for field in Disciplina._meta.fields]
+        return list_of_fields
+
     def __str__(self):
         return self.name + " - " + self.tag_disciplina
 
@@ -119,6 +151,10 @@ class Turma(models.Model):
             else:
                 success = True
 
+    def get_fields(self):
+        list_of_fields = [(field.name, field.value_to_string(self)) for field in Turma._meta.fields]
+        return list_of_fields
+
     def __str__(self):
         return f'{self.disciplina.name} - {self.ano}.{self.semestre} - {self.tag_turma}'
 
@@ -152,8 +188,13 @@ class Equipe(models.Model):
             else:
                 success = True
 
+    def get_fields(self):
+        list_of_fields = [(field.name, field.value_to_string(self)) for field in Equipe._meta.fields]
+        return list_of_fields
+
     def __str__(self):
         return f'{self.name} - {self.tag_equipe}'
+    
 
 
 class TurmasClass(object):

@@ -64,6 +64,7 @@ ROOT_URLCONF = 'pblacore.urls'
 
 # AUTH_USER_MODEL = 'coreapp.ExtendedUser'
 
+DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
 
 TEMPLATES = [
     {

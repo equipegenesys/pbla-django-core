@@ -1,0 +1,17 @@
+{% extends "adm_nav.html" %} 
+{% load static %}
+{% block content %}
+    {% comment %} <div class="tabless-container"> {% endcomment %}
+        {% if object_list %}
+            <h3  class="table-container">{{title}}</h3>
+            {% load render_table from django_tables2 %}
+            {% render_table table %}        
+        {% else %}
+            <p>Você ainda não tem nenhuma turma.</p>
+        {% endif %}
+    {% comment %} </div> {% endcomment %}
+        {% comment %} <script>
+            var object_count = "{{ object_count }}";
+        </script>
+        <script src="{% static 'coreapp/tables.js' %}"></script> {% endcomment %}
+{% endblock %}

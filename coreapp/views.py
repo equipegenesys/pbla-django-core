@@ -7,34 +7,35 @@ from django.contrib.auth import logout
 from django.urls import reverse
 from django.template import loader
 from django import template
+from django.core import serializers as django_serializer
 
 from django_tables2 import SingleTableView
-from .tables import PersonTable
+from . import tables
 
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.list import MultipleObjectMixin
 from django.template.response import TemplateResponse
 
-from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import permission_required
+# from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User, Group
 
 from rest_framework import viewsets
 from rest_framework import permissions
-from rest_framework import generics
+# from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
 from . import gateway
 from .serializers import UserSerializer, GroupSerializer, TurmaSerializer, IntegrantesSerializer
-from .models import Turma, TurmasClass, TurmaEquipe, Equipe
+from .models import Turma, TurmasClass, TurmaEquipe, Equipe, Disciplina, Instituicao, Curso, Pessoa
 
-from multiprocessing import Pool
+# from multiprocessing import Pool
 from threading import Thread
 
-from asgiref.sync import sync_to_async
+# from asgiref.sync import sync_to_async
 
 # pool = Pool(4)
 
@@ -80,6 +81,8 @@ class CustomLogoutView(contrib_views.LogoutView):
 #     print(results)
     
 #     return render(request, template_name)
+
+
 
 
 class UpdateDataView(PermissionRequiredMixin, TemplateView):
@@ -164,6 +167,7 @@ class ProfessorDash(PermissionRequiredMixin, TemplateView):
         # context['updating_data'] = updating_data
         return context
 
+
 class Estudante(PermissionRequiredMixin, TemplateView):
     template_name = "home/integra.html"
     permission_required = ('coreapp.view_myestudante')
@@ -240,19 +244,149 @@ class EquipeListView(PermissionRequiredMixin, TemplateView):
         }
         return context
 
-# class TurmasFromUser(ListView):
-#     model = Turma
-#     context_object_name = 'turmas_do_estudante'
-#     template_name = 'home/include_turma.html'
+
+
+class InstituicaoListView(SingleTableView):
+    model = Instituicao
+    table_class = tables.InstituicaoTable
+    template_name = 'tables.html'
+    table_pagination = {
+        "per_page": 8
+    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Instituições'
+        return context
+class InstituicaoDetalheView(DetailView):
+    model = Instituicao
+    template_name = 'adm_detail.html'
+
+    def get_object(self, queryset=None):
+        print(self.kwargs.get("pk"))
+        print(type(self.kwargs.get("pk")))
+        return Instituicao.objects.get(pk=self.kwargs.get("pk"))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Instituição"'
+        return context
 
 
 
+class CursoListView(SingleTableView):
+    model = Curso
+    table_class = tables.CursoTable
+    template_name = 'tables.html'
+    table_pagination = {
+        "per_page": 8
+    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Cursos'
+        return context
+class CursoDetalheView(DetailView):
+    model = Curso
+    template_name = 'adm_detail.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Curso'
+        return context
 
-# tutorial/views.py
+
+class DisciplinaListView(SingleTableView):
+    model = Disciplina
+    table_class = tables.DisciplinaTable
+    template_name = 'tables.html'
+    table_pagination = {
+        "per_page": 8
+    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Disciplinas'
+        return context
+class DisciplinaDetalheView(DetailView):
+    model = Disciplina
+    template_name = 'adm_detail.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Disciplina'
+        return context
+
+
+
+class TurmaListView(SingleTableView):
+    model = Turma
+    table_class = tables.TurmaTable
+    template_name = 'tables.html'
+    table_pagination = {
+        "per_page": 8
+    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Turmas'
+        return context
+class TurmaDetalheView(DetailView):
+    model = Turma
+    template_name = 'adm_detail.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Turma'
+        return context
+
+
+class EquipeListView(SingleTableView):
+    model = Equipe
+    table_class = tables.EquipeTable
+    template_name = 'tables.html'
+    table_pagination = {
+        "per_page": 8
+    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Equipes'
+        return context
+class EquipeDetalheView(DetailView):
+    model = Equipe
+    template_name = 'adm_detail.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Equipe'
+        return context
+
+
+
 class PersonListView(SingleTableView):
-    model = User
-    table_class = PersonTable
-    template_name = 'home/people.html'
+    model = Pessoa
+    table_class = tables.PersonTable
+    template_name = 'tables.html'
+    table_pagination = {
+        "per_page": 8
+    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Pessoas'
+        return context
+class PessoaDetalheView(DetailView):
+    model = Pessoa
+    template_name = 'adm_detail.html'
+
+    # def get_object(self, queryset=None):
+    #     # print(self.kwargs.get("pk"))
+    #     # print(type(self.kwargs.get("pk")))
+    #     return self.model.objects.get(pk=self.kwargs.get("pk"))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Pessoa'
+        return context
+
+
+
+
 
 
 

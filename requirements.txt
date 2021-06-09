@@ -9,3 +9,4 @@ requests
 PyYAML
 httpx
 django-form-utils
+django_tables2
