@@ -1,18 +1,10 @@
 from django.conf import settings
 from django.db import models
-# from django.contrib.auth.models import User
-from django.db.utils import IntegrityError
 from django.db import transaction
 from strgen import StringGenerator as SG
 from string import ascii_uppercase as alphabet
-from django.contrib.auth.models import User, Group, AbstractUser
-# from .managers import PersonManager
-
-# from django.contrib.auth.models import AbstractUser
-
-# class ExtendedUser(AbstractUser):
-#     pass
-    # first_name = models.Field(verbose_name = "Nome")
+from django.contrib.auth.models import User
+from django.urls import reverse
 
 class Pessoa(User):
     # objects = PersonManager()
@@ -48,6 +40,9 @@ class MyAdm(models.Model):
 class Instituicao(models.Model):
     name = models.CharField(max_length=300)
     # pub_date = models.DateTimeField('date published')
+
+    def get_absolute_url(self):
+        return reverse('insti-detalhe', kwargs={'pk': self.pk})
 
     def get_fields(self):
         list_of_fields = [(field.name, field.value_to_string(self)) for field in Instituicao._meta.fields]
@@ -187,6 +182,9 @@ class Equipe(models.Model):
                     self.tag_equipe = SG('[A-Z0-9]{4}').render()
             else:
                 success = True
+
+    def get_absolute_url(self):
+        return reverse('curso-detalhe', kwargs={'pk': self.pk})
 
     def get_fields(self):
         list_of_fields = [(field.name, field.value_to_string(self)) for field in Equipe._meta.fields]

@@ -18,6 +18,8 @@
     />
 
     <link href={% static 'coreapp/base.css' %} rel="stylesheet" />
+    <link rel="shortcut icon" href={% static "coreapp/img/favicon.ico" %} type="image/x-icon">
+    <link rel="icon" href={% static "coreapp/img/favicon.ico" %} type="image/x-icon"> 
 
     <title>PBL Analytics</title>
   </head>
@@ -69,7 +71,7 @@
     ></script>
       <script>
         var topbar_height = $('.navbar').height();
-        console.log(topbar_height);
+        {% comment %} console.log(topbar_height); {% endcomment %}
         document.getElementById("main").style.marginTop = (topbar_height + 16)+"px";
         document.getElementById("main").style.height = (window.innerHeight - (topbar_height + 16)) + "px";
       </script>  </body>

@@ -1,0 +1,12 @@
+{% extends "adm_nav.html" %}
+
+{% block content %}
+<div class="details">
+<h3>Adicionar curso</h3>
+<form action="/adm/cursos/add" method="post">
+    {% csrf_token %}
+    <button type="submit" id="bto-enviar" class="btn btn-primary">Enviar</button>
+    {{ form }}
+</form>
+</div>
+{% endblock %}

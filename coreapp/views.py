@@ -1,20 +1,21 @@
-from django.db.models.query_utils import Q
+# from django.db.models.query_utils import Q
 from django.shortcuts import redirect, render
-from django.http import HttpResponse, HttpResponseRedirect
+# from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import views as contrib_views
 # from django.contrib.auth.models import User as BuiltInUser
 from django.contrib.auth import logout
-from django.urls import reverse
-from django.template import loader
+from django.urls import reverse, reverse_lazy
+# from django.template import loader
 from django import template
 from django.core import serializers as django_serializer
 
 from django_tables2 import SingleTableView
-from . import tables
+from . import tables, forms
 
 from django.views.generic import TemplateView, ListView, DetailView
-from django.views.generic.list import MultipleObjectMixin
-from django.template.response import TemplateResponse
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+# from django.views.generic.list import MultipleObjectMixin
+# from django.template.response import TemplateResponse
 
 # from django.contrib.auth.decorators import permission_required
 # from django.contrib.auth.decorators import login_required
@@ -116,7 +117,7 @@ class UpdateDataView(PermissionRequiredMixin, TemplateView):
         context['tag_equipe'] = tag_equipe
         context['user_list'] = user_list
         context['user_count'] = len(user_list)
-        print(context)
+        # print(context)
         return context
 
 
@@ -264,15 +265,19 @@ class InstituicaoDetalheView(DetailView):
     template_name = 'adm_detail.html'
 
     def get_object(self, queryset=None):
-        print(self.kwargs.get("pk"))
-        print(type(self.kwargs.get("pk")))
+        # print(self.kwargs.get("pk"))
+        # print(type(self.kwargs.get("pk")))
         return Instituicao.objects.get(pk=self.kwargs.get("pk"))
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Instituição"'
+        context['title'] = 'Instituição'
         return context
-
+class InstituicaoCreateView(CreateView):
+    model = Instituicao
+    form_class = forms.InstituicaoForm
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 
 class CursoListView(SingleTableView):
@@ -296,7 +301,11 @@ class CursoDetalheView(DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Curso'
         return context
-
+class CursoCreateView(CreateView):
+    model = Curso
+    form_class = forms.CursoForm
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 class DisciplinaListView(SingleTableView):
     model = Disciplina
@@ -319,7 +328,11 @@ class DisciplinaDetalheView(DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Disciplina'
         return context
-
+class DisciplinaCreateView(CreateView):
+    model = Disciplina
+    form_class = forms.DisciplinaForm
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 
 class TurmaListView(SingleTableView):
@@ -343,7 +356,11 @@ class TurmaDetalheView(DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Turma'
         return context
-
+class TurmaCreateView(CreateView):
+    model = Turma
+    form_class = forms.TurmaForm
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 class EquipeListView(SingleTableView):
     model = Equipe
@@ -366,7 +383,11 @@ class EquipeDetalheView(DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Equipe'
         return context
-
+class EquipeCreateView(CreateView):
+    model = Equipe
+    form_class = forms.EquipeForm
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 
 class PersonListView(SingleTableView):
@@ -395,7 +416,11 @@ class PessoaDetalheView(DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Pessoa'
         return context
-
+class PessoaCreateView(CreateView):
+    model = Pessoa
+    form_class = forms.PessoaForm
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 
 

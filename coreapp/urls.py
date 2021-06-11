@@ -20,6 +20,13 @@ urlpatterns = [
     path('adm/turmas/<int:pk>', views.TurmaDetalheView.as_view(), name='turma-detalhe'),
     path('adm/equipes/<int:pk>', views.EquipeDetalheView.as_view(), name='equipe-detalhe'),
     path('adm/pessoas/<int:pk>', views.PessoaDetalheView.as_view(), name='pessoa-detalhe'),
+    path('adm/instituicoes/add', views.InstituicaoCreateView.as_view(), name='insti-form'),
+    path('adm/cursos/add', views.CursoCreateView.as_view(), name='curso-form'),
+    path('adm/disciplinas/add', views.DisciplinaCreateView.as_view(), name='disci-form'),
+    path('adm/turmas/add', views.TurmaCreateView.as_view(), name='turma-form'),
+    path('adm/equipes/add', views.EquipeCreateView.as_view(), name='equipe-form'),
+    path('adm/pessoas/add', views.PessoaCreateView.as_view(), name='pessoa-form'),
+
 ]
 
 urlpatterns += [

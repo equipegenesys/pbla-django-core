@@ -32,20 +32,30 @@ body {
     /* height: 250px; */
 }
 
+#bto-enviar {
+    float: right;
+    margin-top: -3em;
+}
+
 .table,
 .pagination,
 .list-group,
 .regular-text,
-.details {
+.details,
+.btn,
+.pagination {
     font-size: small;
 }
 
 .pagination {
-    font-size: small;
     justify-content: flex-end !important;
 }
 
 .hover-class:hover {
     /* background-color: rgb(235, 230, 230); */
     cursor: pointer;
+}
+
+#form-name {
+    width: 40em;
 }

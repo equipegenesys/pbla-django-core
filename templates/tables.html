@@ -3,6 +3,11 @@
 {% block content %}
         {% if object_list %}
             <h3  class="table-container">{{title}}</h3>
+
+            <form action="https://analytics.pbl.tec.br/adm/{{ subpath }}/add">
+                <input type="submit" id="bto-enviar" class="btn btn-primary" value="Adicionar" />
+            </form>
+
             {% load render_table from django_tables2 %}
             {% render_table table %}        
         {% else %}
