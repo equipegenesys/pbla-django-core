@@ -22,7 +22,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User, Group
 
-from rest_framework import viewsets
+# from rest_framework import viewsets
 from rest_framework import permissions
 # from rest_framework import generics
 from rest_framework.views import APIView
@@ -32,9 +32,10 @@ from rest_framework import status
 from . import gateway
 from .serializers import UserSerializer, GroupSerializer, TurmaSerializer, IntegrantesSerializer
 from .models import Turma, TurmasClass, TurmaEquipe, Equipe, Disciplina, Instituicao, Curso, Pessoa
+from django.db.models import Q
 
 # from multiprocessing import Pool
-from threading import Thread
+# from threading import Thread
 
 # from asgiref.sync import sync_to_async
 
@@ -48,7 +49,7 @@ class CustomLoginView(contrib_views.LoginView):
         group_list = self.request.user.groups.values_list('name', flat=True)
         group_list = list(group_list)
         if 'professores' in group_list:
-            return reverse("professor_turmas")
+            return reverse("instituicoes")
         elif 'estudantes' in group_list:
             return reverse("integra")
         else:
@@ -60,6 +61,22 @@ class CustomLogoutView(contrib_views.LogoutView):
     def get_success_url(self):
         return reverse("login")
 
+# class CustomPasswordChangeView(contrib_views.PasswordChangeView):
+#     def get_success_url(self):
+#         return reverse("login")
+
+# class CustomPasswordChangeView(contrib_views.PasswordChangeView):
+#     def get_success_url(self):
+#         return reverse("login")
+
+# class CustomPasswordResetView(contrib_views.PasswordResetView):
+#     pass
+
+# class CustomPwresetView(contrib_views.PasswordResetConfirmView):
+#     pass
+
+# class CustomPwresetView(contrib_views.PasswordResetDoneView):
+#     pass
 
 
 # async def UpdateDataView(request, tag_turma, tag_equipe):
@@ -84,8 +101,6 @@ class CustomLogoutView(contrib_views.LogoutView):
 #     return render(request, template_name)
 
 
-
-
 class UpdateDataView(PermissionRequiredMixin, TemplateView):
     template_name = "vis/update.html"
     permission_required = ('coreapp.view_dash')
@@ -97,7 +112,6 @@ class UpdateDataView(PermissionRequiredMixin, TemplateView):
         
         turma_equipe = TurmaEquipe()
         context = super().get_context_data(**kwargs)
-
 
         user_list = []
         users = User.objects.filter(equipe__tag_equipe=tag_equipe)
@@ -117,39 +131,16 @@ class UpdateDataView(PermissionRequiredMixin, TemplateView):
         context['tag_equipe'] = tag_equipe
         context['user_list'] = user_list
         context['user_count'] = len(user_list)
-        # print(context)
         return context
-
 
 class ProfessorDash(PermissionRequiredMixin, TemplateView):
     template_name = "vis/dash.html"
     permission_required = ('coreapp.view_dash')
-    # print(django.VERSION)
 
     def get_context_data(self, **kwargs):
-
-        # tag_turma = self.request.GET.get('turma')
-        # tag_equipe = self.request.GET.get('equipe')
         
         tag_turma = kwargs.get('tag_turma')
         tag_equipe = kwargs.get('tag_equipe')
-
-
-
-        
-        # users = User.objects.filter(equipe__tag_equipe=tag_equipe)
-        # t = Thread(target=gateway.update_gdrive_records, args=(users, ))
-        # t.start()
-        # print("this will be printed immediately")
-
-        # if t.is_alive():
-        #     updating_data = True
-        #     print(updating_data)
-        # else:
-        #     updating_data = False
-        #     print(updating_data)
-            
-
 
         turma_equipe = TurmaEquipe()
         context = super().get_context_data(**kwargs)
@@ -167,7 +158,6 @@ class ProfessorDash(PermissionRequiredMixin, TemplateView):
         context['tag_equipe'] = tag_equipe
         # context['updating_data'] = updating_data
         return context
-
 
 class Estudante(PermissionRequiredMixin, TemplateView):
     template_name = "home/integra.html"
@@ -246,9 +236,9 @@ class EquipeListView(PermissionRequiredMixin, TemplateView):
         return context
 
 
-
-class InstituicaoListView(SingleTableView):
+class InstituicaoListView(PermissionRequiredMixin, SingleTableView):
     model = Instituicao
+    permission_required = ('coreapp.view_dash')
     table_class = tables.InstituicaoTable
     template_name = 'tables.html'
     table_pagination = {
@@ -260,28 +250,34 @@ class InstituicaoListView(SingleTableView):
         context['subpath'] = 'instituicoes'
         context['object_count'] = len(self.model.objects.values_list())
         return context
-class InstituicaoDetalheView(DetailView):
+class InstituicaoDetalheView(PermissionRequiredMixin, DetailView):
     model = Instituicao
+    permission_required = ('coreapp.view_dash')
     template_name = 'adm_detail.html'
-
     def get_object(self, queryset=None):
-        # print(self.kwargs.get("pk"))
-        # print(type(self.kwargs.get("pk")))
-        return Instituicao.objects.get(pk=self.kwargs.get("pk"))
-    
+        return Instituicao.objects.get(pk=self.kwargs.get("pk"))    
     def get_context_data(self, **kwargs):
+        # print(self.kwargs.get("pk"))
         context = super().get_context_data(**kwargs)
         context['title'] = 'Instituição'
+        pk_str = str(self.kwargs.get("pk"))
+        context['subpath'] = f"instituicoes/delete/{pk_str}"
         return context
-class InstituicaoCreateView(CreateView):
+class InstituicaoCreateView(PermissionRequiredMixin, CreateView):
     model = Instituicao
+    permission_required = ('coreapp.view_dash')
     form_class = forms.InstituicaoForm
     def form_valid(self, form):
         return super().form_valid(form)
+class InstituicaoDeleteView(PermissionRequiredMixin, DeleteView):
+    model = Instituicao
+    permission_required = ('coreapp.view_dash')
+    success_url = reverse_lazy('instituicoes')
 
 
-class CursoListView(SingleTableView):
+class CursoListView(PermissionRequiredMixin, SingleTableView):
     model = Curso
+    permission_required = ('coreapp.view_dash')
     table_class = tables.CursoTable
     template_name = 'tables.html'
     table_pagination = {
@@ -293,22 +289,34 @@ class CursoListView(SingleTableView):
         context['subpath'] = 'cursos'
         context['object_count'] = len(self.model.objects.values_list())
         return context
-class CursoDetalheView(DetailView):
+class CursoDetalheView(PermissionRequiredMixin, DetailView):
     model = Curso
+    permission_required = ('coreapp.view_dash')
     template_name = 'adm_detail.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Curso'
+        pk_str = str(self.kwargs.get("pk"))
+        context['subpath'] = f"cursos/delete/{pk_str}"
+
         return context
-class CursoCreateView(CreateView):
+class CursoCreateView(PermissionRequiredMixin, CreateView):
     model = Curso
+    permission_required = ('coreapp.view_dash')
     form_class = forms.CursoForm
+    # fields = ['instituicao', 'name', 'nivel']
     def form_valid(self, form):
         return super().form_valid(form)
+class CursoDeleteView(PermissionRequiredMixin, DeleteView):
+    model = Curso
+    permission_required = ('coreapp.view_dash')
+    success_url = reverse_lazy('cursos')
 
-class DisciplinaListView(SingleTableView):
+
+class DisciplinaListView(PermissionRequiredMixin, SingleTableView):
     model = Disciplina
+    permission_required = ('coreapp.view_dash')
     table_class = tables.DisciplinaTable
     template_name = 'tables.html'
     table_pagination = {
@@ -320,23 +328,33 @@ class DisciplinaListView(SingleTableView):
         context['subpath'] = 'disciplinas'
         context['object_count'] = len(self.model.objects.values_list())
         return context
-class DisciplinaDetalheView(DetailView):
+class DisciplinaDetalheView(PermissionRequiredMixin, DetailView):
     model = Disciplina
+    permission_required = ('coreapp.view_dash')
     template_name = 'adm_detail.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Disciplina'
+        pk_str = str(self.kwargs.get("pk"))
+        context['subpath'] = f"disciplinas/delete/{pk_str}"
+
         return context
-class DisciplinaCreateView(CreateView):
+class DisciplinaCreateView(PermissionRequiredMixin, CreateView):
     model = Disciplina
+    permission_required = ('coreapp.view_dash')
     form_class = forms.DisciplinaForm
     def form_valid(self, form):
         return super().form_valid(form)
+class DisciplinaDeleteView(PermissionRequiredMixin, DeleteView):
+    model = Disciplina
+    permission_required = ('coreapp.view_dash')
+    success_url = reverse_lazy('disciplinas')
 
 
-class TurmaListView(SingleTableView):
+class TurmaListView(PermissionRequiredMixin, SingleTableView):
     model = Turma
+    permission_required = ('coreapp.view_dash')
     table_class = tables.TurmaTable
     template_name = 'tables.html'
     table_pagination = {
@@ -348,22 +366,33 @@ class TurmaListView(SingleTableView):
         context['subpath'] = 'turmas'
         context['object_count'] = len(self.model.objects.values_list())
         return context
-class TurmaDetalheView(DetailView):
+class TurmaDetalheView(PermissionRequiredMixin, DetailView):
     model = Turma
+    permission_required = ('coreapp.view_dash')
     template_name = 'adm_detail.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Turma'
+        pk_str = str(self.kwargs.get("pk"))
+        context['subpath'] = f"turmas/delete/{pk_str}"
+
         return context
-class TurmaCreateView(CreateView):
+class TurmaCreateView(PermissionRequiredMixin, CreateView):
     model = Turma
+    permission_required = ('coreapp.view_dash')
     form_class = forms.TurmaForm
     def form_valid(self, form):
         return super().form_valid(form)
+class TurmaDeleteView(PermissionRequiredMixin, DeleteView):
+    model = Turma
+    permission_required = ('coreapp.view_dash')
+    success_url = reverse_lazy('turmas')
 
-class EquipeListView(SingleTableView):
+
+class EquipeListView(PermissionRequiredMixin, SingleTableView):
     model = Equipe
+    permission_required = ('coreapp.view_dash')
     table_class = tables.EquipeTable
     template_name = 'tables.html'
     table_pagination = {
@@ -375,24 +404,35 @@ class EquipeListView(SingleTableView):
         context['subpath'] = 'equipes'
         context['object_count'] = len(self.model.objects.values_list())
         return context
-class EquipeDetalheView(DetailView):
+class EquipeDetalheView(PermissionRequiredMixin, DetailView):
     model = Equipe
+    permission_required = ('coreapp.view_dash')
     template_name = 'adm_detail.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Equipe'
+        pk_str = str(self.kwargs.get("pk"))
+        context['subpath'] = f"equipes/delete/{pk_str}"
+
         return context
-class EquipeCreateView(CreateView):
+class EquipeCreateView(PermissionRequiredMixin, CreateView):
     model = Equipe
+    permission_required = ('coreapp.view_dash')
     form_class = forms.EquipeForm
     def form_valid(self, form):
         return super().form_valid(form)
+class EquipeDeleteView(PermissionRequiredMixin, DeleteView):
+    model = Equipe
+    permission_required = ('coreapp.view_dash')
+    success_url = reverse_lazy('equipes')
 
 
-class PersonListView(SingleTableView):
+class PersonListView(PermissionRequiredMixin, SingleTableView):
     model = Pessoa
+    permission_required = ('coreapp.view_dash')
     table_class = tables.PersonTable
+    table_data = Pessoa.objects.filter(Q(is_staff=False) & Q(is_superuser=False))
     template_name = 'tables.html'
     table_pagination = {
         "per_page": 8
@@ -403,62 +443,62 @@ class PersonListView(SingleTableView):
         context['subpath'] = 'pessoas'
         context['object_count'] = len(self.model.objects.values_list())
         return context
-class PessoaDetalheView(DetailView):
+class PessoaDetalheView(PermissionRequiredMixin, DetailView):
     model = Pessoa
-    template_name = 'adm_detail.html'
-
-    # def get_object(self, queryset=None):
-    #     # print(self.kwargs.get("pk"))
-    #     # print(type(self.kwargs.get("pk")))
-    #     return self.model.objects.get(pk=self.kwargs.get("pk"))
-    
+    permission_required = ('coreapp.view_dash')
+    template_name = 'adm_detail.html'    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Pessoa'
+        pk_str = str(self.kwargs.get("pk"))
+        context['subpath'] = f"pessoas/delete/{pk_str}"
+
         return context
-class PessoaCreateView(CreateView):
+class PessoaCreateView(PermissionRequiredMixin, CreateView):
     model = Pessoa
+    permission_required = ('coreapp.view_dash')
     form_class = forms.PessoaForm
     def form_valid(self, form):
         return super().form_valid(form)
+class PessoaDeleteView(PermissionRequiredMixin, DeleteView):
+    model = Pessoa
+    permission_required = ('coreapp.view_dash')
+    success_url = reverse_lazy('pessoas')
+
+    def delete(self, *args, **kwargs):
+        if self.model.objects.get(pk=kwargs.get("pk")).is_staff or self.model.objects.get(pk=kwargs.get("pk")).is_superuser:
+            print("opa")
+            raise Exception('Você não pode apagar usuários administradores.')  # or you can throw your custom exception here.
+        return super(PessoaDeleteView, self).delete(*args, **kwargs)
 
 
+# class MyAdmView(PermissionRequiredMixin, TemplateView):
+#     template_name = "home/adm.html"
+#     permission_required = ('coreapp.view_myadm')
 
+# class UserViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows users to be viewed or edited.
+#     """
+#     queryset = User.objects.all().order_by('-date_joined')
+#     serializer_class = UserSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
+# class GroupViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows groups to be viewed or edited.
+#     """
+#     queryset = Group.objects.all()
+#     serializer_class = GroupSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
-
-
-
-class MyAdmView(PermissionRequiredMixin, TemplateView):
-    template_name = "home/adm.html"
-    permission_required = ('coreapp.view_myadm')
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class TurmaViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows turmas to be viewed or edited.
-    """
-    queryset = Turma.objects.all()
-    serializer_class = TurmaSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class TurmaViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows turmas to be viewed or edited.
+#     """
+#     queryset = Turma.objects.all()
+#     serializer_class = TurmaSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
 
 class TurmaUserView(APIView):

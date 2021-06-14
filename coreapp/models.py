@@ -25,6 +25,9 @@ class Pessoa(User):
         partial_list = [partial_list[i] for i in order]
         return partial_list
 
+    def get_absolute_url(self):
+        return reverse('pessoa-detalhe', kwargs={'pk': self.pk})
+
 class Dash(models.Model):
     pass
 
@@ -56,6 +59,9 @@ class Curso(models.Model):
     instituicao = models.ForeignKey(Instituicao, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     nivel = models.CharField(max_length=200)
+
+    def get_absolute_url(self):
+        return reverse('curso-detalhe', kwargs={'pk': self.pk})
 
     def get_fields(self):
         list_of_fields = [(field.name, field.value_to_string(self)) for field in Curso._meta.fields]
@@ -108,6 +114,9 @@ class Disciplina(models.Model):
             else:
                 success = True
 
+    def get_absolute_url(self):
+        return reverse('disci-detalhe', kwargs={'pk': self.pk})
+
     def get_fields(self):
         list_of_fields = [(field.name, field.value_to_string(self)) for field in Disciplina._meta.fields]
         return list_of_fields
@@ -145,6 +154,9 @@ class Turma(models.Model):
                     trials = trials + 1
             else:
                 success = True
+
+    def get_absolute_url(self):
+        return reverse('turma-detalhe', kwargs={'pk': self.pk})
 
     def get_fields(self):
         list_of_fields = [(field.name, field.value_to_string(self)) for field in Turma._meta.fields]
@@ -184,7 +196,7 @@ class Equipe(models.Model):
                 success = True
 
     def get_absolute_url(self):
-        return reverse('curso-detalhe', kwargs={'pk': self.pk})
+        return reverse('equipe-detalhe', kwargs={'pk': self.pk})
 
     def get_fields(self):
         list_of_fields = [(field.name, field.value_to_string(self)) for field in Equipe._meta.fields]

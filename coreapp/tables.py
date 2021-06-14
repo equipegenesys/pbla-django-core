@@ -35,19 +35,6 @@ class CursoTable(tables.Table):
             'class': 'hover-class'
         }
 
-class PersonTable(tables.Table):
-    # first_name = tables.LinkColumn('pessoas', empty_values=())  # not in meta
-
-    class Meta:
-        model = models.Pessoa
-        template_name = "django_tables2/bootstrap4.html"
-        fields = ("id", "first_name", "last_name", "email", "is_staff", )
-        attrs = {"class": "table table-hover"}
-        row_attrs = {
-            # 'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
-            'class': 'hover-class'
-        }
-
 class TurmaTable(tables.Table):
     # first_name = tables.LinkColumn('pessoas', empty_values=())  # not in meta
 
@@ -80,7 +67,20 @@ class EquipeTable(tables.Table):
     class Meta:
         model = models.Equipe
         template_name = "django_tables2/bootstrap4.html"
-        fields = ("id", "tag_equipe", "user")
+        fields = ("id", "name", "tag_equipe", "user")
+        attrs = {"class": "table table-hover"}
+        row_attrs = {
+            # 'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
+            'class': 'hover-class'
+        }
+
+class PersonTable(tables.Table):
+    # first_name = tables.LinkColumn('pessoas', empty_values=())  # not in meta
+
+    class Meta:
+        model = models.Pessoa
+        template_name = "django_tables2/bootstrap4.html"
+        fields = ("id", "username", "first_name", "last_name", "email", "groups")
         attrs = {"class": "table table-hover"}
         row_attrs = {
             # 'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",

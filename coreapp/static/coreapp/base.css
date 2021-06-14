@@ -37,6 +37,15 @@ body {
     margin-top: -3em;
 }
 
+#bto-excluir {
+    float: right;
+    margin-top: -4.5em;
+}
+
+#form-check {
+    width: fit-content;
+}
+
 .table,
 .pagination,
 .list-group,
@@ -56,6 +65,13 @@ body {
     cursor: pointer;
 }
 
-#form-name {
+.form-control {
     width: 40em;
+    font-size: small;
+    margin-bottom: 1em;
+}
+
+label {
+    font-size: small;
+    margin-bottom: 2px;
 }
