@@ -1,4 +1,34 @@
-<form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete "{{ object }}"?</p>
-    <input type="submit" value="Confirm">
-</form>
+{% extends "adm_nav.html" %} {% block content %}
+<div class="row">
+  <div class="col-sm-12">
+    <p>
+      Tem certeza que deseja excluir o curso <b>{{ object.name }}</b> do banco de
+      dados?
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12 d-inline-flex">
+    <form method="post">
+      {% csrf_token %}
+
+      <input
+        type="submit"
+        class="btn btn-danger btn-md center-block confirmation-btns"
+        value="Sim, excluir!"
+      />
+    </form>
+
+    <button class="btn btn-primary btn-md center-block confirmation-btns" onclick="goBack()">
+      Cancelar
+    </button>
+
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+    </script>
+  </div>
+</div>
+{% endblock %}

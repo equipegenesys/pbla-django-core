@@ -5,13 +5,12 @@
     /* height: 25px; */
 }
 
-.table-container,
-.details {
+.table-container {
     padding-top: 20px;
 }
 
 #sidenav {
-    padding-top: 20px;
+    padding-top: 30px;
 }
 
 .navbar-brand {
@@ -52,7 +51,8 @@ body {
 .regular-text,
 .details,
 .btn,
-.pagination {
+.pagination,
+p {
     font-size: small;
 }
 
@@ -74,4 +74,13 @@ body {
 label {
     font-size: small;
     margin-bottom: 2px;
+}
+
+#content {
+    padding-left: 25px;
+    padding-top: 30px;
+}
+
+.confirmation-btns {
+    margin-inline-end: 1em;
 }

@@ -5,10 +5,11 @@
     
     <h3>{{title}}</h3>
     <br>
-            <form action="https://analytics.pbl.tec.br/adm/{{ subpath }}">
-                <input type="submit" id="bto-excluir" class="btn btn-primary" value="Excluir" />
-            </form>
-            
+    
+        <form action="https://analytics.pbl.tec.br/adm/{{ subpath }}">
+            <input type="submit" id="bto-excluir" class="btn btn-primary" value="Excluir" />
+        </form>
+
     {% for field in object.get_fields %}
     
     <p><b>{{ field.0 }}</b>: {{field.1}}</p>
