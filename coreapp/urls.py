@@ -36,6 +36,12 @@ urlpatterns = [
     path('adm/equipes/delete/<int:pk>', views.EquipeDeleteView.as_view(), name='delete-equipe'),
     path('adm/pessoas/delete/<int:pk>', views.PessoaDeleteView.as_view(), name='delete-pessoas'),
 
+    path('adm/instituicoes/edit/<int:pk>', views.InstituicaoUpdateView.as_view(), name='update-insti'),
+    path('adm/cursos/edit/<int:pk>', views.CursoUpdateView.as_view(), name='update-curso'),
+    path('adm/disciplinas/edit/<int:pk>', views.DisciplinaUpdateView.as_view(), name='update-disci'),
+    path('adm/turmas/edit/<int:pk>', views.TurmaUpdateView.as_view(), name='update-turma'),
+    path('adm/equipes/edit/<int:pk>', views.EquipeUpdateView.as_view(), name='update-equipe'),
+    path('adm/pessoas/edit/<int:pk>', views.PessoaUpdateView.as_view(), name='update-pessoas'),
 ]
 
 urlpatterns += [

@@ -1,16 +1,24 @@
-{% extends "adm_nav.html" %}
+{% extends "adm_nav.html" %} 
 
 {% block content %}
 
 <div class="details">
 
-    <h3>Adicionar pessoa</h3>
+    <h3>Editar pessoa</h3>
 
-    <form action="/adm/pessoas/add" method="post">
+     <button
+        class="btn btn-secondary btn-md center-block confirmation-btns"
+        id="bto-cancelar"
+        onclick="goBack()"
+        >
+        Voltar
+    </button>
+
+    <form method="post">
 
         {% csrf_token %}
         
-        <button type="submit" id="bto-enviar" class="btn btn-primary">Enviar</button>
+        <button type="submit" id="bto-enviar" class="btn btn-primary">Salvar</button>
 
         {{ form.first_name.label }}:
         {{ form.first_name }}
@@ -34,7 +42,13 @@
         {{ form.is_staff }}
 
     </form>
-
+        
 </div>
+
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
 
 {% endblock %}

@@ -261,7 +261,8 @@ class InstituicaoDetalheView(PermissionRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Instituição'
         pk_str = str(self.kwargs.get("pk"))
-        context['subpath'] = f"instituicoes/delete/{pk_str}"
+        context['subpath_excluir'] = f"instituicoes/delete/{pk_str}"
+        context['subpath_editar'] = f"instituicoes/edit/{pk_str}"        
         return context
 class InstituicaoCreateView(PermissionRequiredMixin, CreateView):
     model = Instituicao
@@ -273,6 +274,15 @@ class InstituicaoDeleteView(PermissionRequiredMixin, DeleteView):
     model = Instituicao
     permission_required = ('coreapp.view_dash')
     success_url = reverse_lazy('instituicoes')
+class InstituicaoUpdateView(PermissionRequiredMixin, UpdateView):
+    model = Instituicao
+    permission_required = ('coreapp.view_dash')
+    form_class = forms.InstituicaoForm
+    template_name_suffix = '_update_form'
+
+    def get_success_url(self, **kwargs):
+        pk = self.kwargs.get("pk")
+        return reverse('insti-detalhe', kwargs={'pk': pk})
 
 
 class CursoListView(PermissionRequiredMixin, SingleTableView):
@@ -298,8 +308,8 @@ class CursoDetalheView(PermissionRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Curso'
         pk_str = str(self.kwargs.get("pk"))
-        context['subpath'] = f"cursos/delete/{pk_str}"
-
+        context['subpath_excluir'] = f"cursos/delete/{pk_str}"
+        context['subpath_editar'] = f"cursos/edit/{pk_str}"
         return context
 class CursoCreateView(PermissionRequiredMixin, CreateView):
     model = Curso
@@ -312,6 +322,15 @@ class CursoDeleteView(PermissionRequiredMixin, DeleteView):
     model = Curso
     permission_required = ('coreapp.view_dash')
     success_url = reverse_lazy('cursos')
+class CursoUpdateView(PermissionRequiredMixin, UpdateView):
+    model = Curso
+    permission_required = ('coreapp.view_dash')
+    form_class = forms.CursoForm
+    template_name_suffix = '_update_form'
+
+    def get_success_url(self, **kwargs):
+        pk = self.kwargs.get("pk")
+        return reverse('curso-detalhe', kwargs={'pk': pk})
 
 
 class DisciplinaListView(PermissionRequiredMixin, SingleTableView):
@@ -337,8 +356,8 @@ class DisciplinaDetalheView(PermissionRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Disciplina'
         pk_str = str(self.kwargs.get("pk"))
-        context['subpath'] = f"disciplinas/delete/{pk_str}"
-
+        context['subpath_excluir'] = f"disciplinas/delete/{pk_str}"
+        context['subpath_editar'] = f"disciplinas/edit/{pk_str}"
         return context
 class DisciplinaCreateView(PermissionRequiredMixin, CreateView):
     model = Disciplina
@@ -350,6 +369,15 @@ class DisciplinaDeleteView(PermissionRequiredMixin, DeleteView):
     model = Disciplina
     permission_required = ('coreapp.view_dash')
     success_url = reverse_lazy('disciplinas')
+class DisciplinaUpdateView(PermissionRequiredMixin, UpdateView):
+    model = Disciplina
+    permission_required = ('coreapp.view_dash')
+    form_class = forms.DisciplinaForm
+    template_name_suffix = '_update_form'
+
+    def get_success_url(self, **kwargs):
+        pk = self.kwargs.get("pk")
+        return reverse('disci-detalhe', kwargs={'pk': pk})
 
 
 class TurmaListView(PermissionRequiredMixin, SingleTableView):
@@ -370,13 +398,14 @@ class TurmaDetalheView(PermissionRequiredMixin, DetailView):
     model = Turma
     permission_required = ('coreapp.view_dash')
     template_name = 'adm_detail.html'
-    
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Turma'
         pk_str = str(self.kwargs.get("pk"))
-        context['subpath'] = f"turmas/delete/{pk_str}"
-
+        context['subpath_excluir'] = f"turmas/delete/{pk_str}"
+        context['subpath_editar'] = f"turmas/edit/{pk_str}"
         return context
 class TurmaCreateView(PermissionRequiredMixin, CreateView):
     model = Turma
@@ -388,6 +417,15 @@ class TurmaDeleteView(PermissionRequiredMixin, DeleteView):
     model = Turma
     permission_required = ('coreapp.view_dash')
     success_url = reverse_lazy('turmas')
+class TurmaUpdateView(PermissionRequiredMixin, UpdateView):
+    model = Turma
+    permission_required = ('coreapp.view_dash')
+    form_class = forms.TurmaForm
+    template_name_suffix = '_update_form'
+
+    def get_success_url(self, **kwargs):
+        pk = self.kwargs.get("pk")
+        return reverse('turma-detalhe', kwargs={'pk': pk})
 
 
 class EquipeListView(PermissionRequiredMixin, SingleTableView):
@@ -413,8 +451,8 @@ class EquipeDetalheView(PermissionRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Equipe'
         pk_str = str(self.kwargs.get("pk"))
-        context['subpath'] = f"equipes/delete/{pk_str}"
-
+        context['subpath_excluir'] = f"equipes/delete/{pk_str}"
+        context['subpath_editar'] = f"equipes/edit/{pk_str}"
         return context
 class EquipeCreateView(PermissionRequiredMixin, CreateView):
     model = Equipe
@@ -426,7 +464,15 @@ class EquipeDeleteView(PermissionRequiredMixin, DeleteView):
     model = Equipe
     permission_required = ('coreapp.view_dash')
     success_url = reverse_lazy('equipes')
+class EquipeUpdateView(PermissionRequiredMixin, UpdateView):
+    model = Equipe
+    permission_required = ('coreapp.view_dash')
+    form_class = forms.EquipeForm
+    template_name_suffix = '_update_form'
 
+    def get_success_url(self, **kwargs):
+        pk = self.kwargs.get("pk")
+        return reverse('equipe-detalhe', kwargs={'pk': pk})
 
 class PersonListView(PermissionRequiredMixin, SingleTableView):
     model = Pessoa
@@ -451,8 +497,8 @@ class PessoaDetalheView(PermissionRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Pessoa'
         pk_str = str(self.kwargs.get("pk"))
-        context['subpath'] = f"pessoas/delete/{pk_str}"
-
+        context['subpath_excluir'] = f"pessoas/delete/{pk_str}"
+        context['subpath_editar'] = f"pessoas/edit/{pk_str}"
         return context
 class PessoaCreateView(PermissionRequiredMixin, CreateView):
     model = Pessoa
@@ -460,6 +506,15 @@ class PessoaCreateView(PermissionRequiredMixin, CreateView):
     form_class = forms.PessoaForm
     def form_valid(self, form):
         return super().form_valid(form)
+class PessoaUpdateView(PermissionRequiredMixin, UpdateView):
+    model = Pessoa
+    permission_required = ('coreapp.view_dash')
+    form_class = forms.PessoaForm
+    template_name_suffix = '_update_form'
+
+    def get_success_url(self, **kwargs):
+        pk = self.kwargs.get("pk")
+        return reverse('pessoa-detalhe', kwargs={'pk': pk})
 class PessoaDeleteView(PermissionRequiredMixin, DeleteView):
     model = Pessoa
     permission_required = ('coreapp.view_dash')
@@ -470,6 +525,7 @@ class PessoaDeleteView(PermissionRequiredMixin, DeleteView):
             print("opa")
             raise Exception('Você não pode apagar usuários administradores.')  # or you can throw your custom exception here.
         return super(PessoaDeleteView, self).delete(*args, **kwargs)
+
 
 
 # class MyAdmView(PermissionRequiredMixin, TemplateView):

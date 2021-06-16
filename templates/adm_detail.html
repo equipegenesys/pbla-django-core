@@ -1,20 +1,30 @@
-{% extends "adm_nav.html" %} 
-
-{% block content %}
+{% extends "adm_nav.html" %} {% block content %}
 <div class="details">
-    
-    <h3>{{title}}</h3>
-    <br>
-    
-        <form action="https://analytics.pbl.tec.br/adm/{{ subpath }}">
-            <input type="submit" id="bto-excluir" class="btn btn-primary" value="Excluir" />
-        </form>
+  <h3>{{title}}</h3>
+  <br />
 
-    {% for field in object.get_fields %}
-    
-    <p><b>{{ field.0 }}</b>: {{field.1}}</p>
-    
-    {% endfor %}
+  <form action="https://analytics.pbl.tec.br/adm/{{ subpath_editar }}">
+    <input
+      type="submit"
+      id="bto-editar"
+      class="btn btn-primary"
+      value="Editar"
+    />
+  </form>
 
+  <form action="https://analytics.pbl.tec.br/adm/{{ subpath_excluir }}">
+    <input
+      type="submit"
+      id="bto-excluir"
+      class="btn btn-primary"
+      value="Excluir"
+    />
+  </form>
+
+  {% for field in object.get_fields %}
+
+  <p><b>{{ field.0 }}</b>: {{field.1}}</p>
+
+  {% endfor %}
 </div>
 {% endblock %}

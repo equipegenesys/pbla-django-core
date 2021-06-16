@@ -1,0 +1,36 @@
+{% extends "adm_nav.html" %} 
+
+{% block content %}
+
+<div class="details">
+
+    <h3>Editar disciplina</h3>
+
+     <button
+        class="btn btn-secondary btn-md center-block confirmation-btns"
+        id="bto-cancelar"
+        onclick="goBack()"
+        >
+        Voltar
+    </button>
+
+    <form method="post">
+
+        {% csrf_token %}
+        
+        <button type="submit" id="bto-enviar" class="btn btn-primary">Salvar</button>
+
+    {{ form }}
+
+
+    </form>
+        
+</div>
+
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
+
+{% endblock %}

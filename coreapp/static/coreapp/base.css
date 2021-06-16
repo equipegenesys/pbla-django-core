@@ -41,6 +41,18 @@ body {
     margin-top: -4.5em;
 }
 
+#bto-editar {
+    float: right;
+    margin-right: 6em;
+    margin-top: -4.5em;
+}
+
+#bto-cancelar {
+    float: right;
+    margin-right: 6em;
+    margin-top: -3em;
+}
+
 #form-check {
     width: fit-content;
 }
