@@ -45,6 +45,8 @@ register = template.Library()
 
 class CustomLoginView(contrib_views.LoginView):
 
+    form_class = forms.UserLoginForm
+
     def get_success_url(self):
         group_list = self.request.user.groups.values_list('name', flat=True)
         group_list = list(group_list)

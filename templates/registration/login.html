@@ -1,21 +1,50 @@
-<!-- templates/registration/login.html -->
+<!DOCTYPE html>
 {% load static %}
-<html>
 
-<head>
-    <link rel="stylesheet" href="{% static 'coreapp/style.css'%}">
-    </link>
-</head>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
-<body id="body-login">
-  <div id="login-div">
-    <img id="logo-login" src="{% static 'coreapp/img/pbllogo_croped.png' %}" />
-    {% comment %} <h2>Log In</h2> {% endcomment %}
-    <form method="post">
-      {% csrf_token %} {{ form.as_p }}
-      <button class="login-button" type="submit">Log In</button>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+      integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+      crossorigin="anonymous"
+    />
+
+    <link href={% static 'coreapp/login.css' %} rel="stylesheet" />
+    <link rel="shortcut icon" href={% static "coreapp/img/favicon.ico" %} type="image/x-icon">
+    <link rel="icon" href={% static "coreapp/img/favicon.ico" %} type="image/x-icon"> 
+
+    <title>PBL Analytics</title>
+  </head>
+
+  <body class="text-center">
+    <form class="form-signin" method="post">
+      <img id="logo-login" class="mb-4" src="{% static 'coreapp/img/pbllogo_croped.png' %}" alt="" width="240" />
+
+      {% comment %} <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1> {% endcomment %}
+
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <label for="{{ form.username.id_for_label }}" class="sr-only">Username:</label>
+      {{ form.username }}
+      {{ form.username.errors }}
+
+
+      <label for="{{ form.password.id_for_label }}" class="sr-only">Password:</label>
+      {{ form.password }}
+      {{ form.password.errors }}
+      
+      <button class="btn btn-sm btn-primary" type="submit">Login</button>
+
+      <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
     </form>
-  </div>
-</body>
+  </body>
 
 </html>

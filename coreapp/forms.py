@@ -1,7 +1,32 @@
+from django.contrib.auth.forms import AuthenticationForm
 from django import forms
 from . import models
 from django.contrib.auth.hashers import make_password
 
+class UserLoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super(UserLoginForm, self).__init__(*args, **kwargs)
+
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control', 
+            'placeholder': 'Nome do usuário', 
+            'id': 'inputEmail',
+            'required': '',
+            'autofocus': '',
+            }
+        )
+    )
+        
+    password = forms.CharField(widget=forms.PasswordInput(
+        attrs={
+            'class': 'form-control',
+            'placeholder': 'Senha',
+            'id': 'inputPassword',
+            'required': '',
+            }
+        )
+    )
 
 class InstituicaoForm(forms.ModelForm):
 
