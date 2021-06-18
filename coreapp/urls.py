@@ -5,7 +5,7 @@ urlpatterns = [
     path('professor/turmas/', views.TurmasListView.as_view(), name='professor_turmas'),
     path('estudante/integra', views.Estudante.as_view(), name='integra'),
     path('estudante/disciplinas', views.TurmasEstudante.as_view(), name='disciplinas'),
-    path('professor/turmas/<str:tag_turma>/equipes/<str:tag_equipe>/', views.ProfessorDash.as_view(), name='professor_dash'),
+    path('analytics/turmas/<str:tag_turma>/equipes/<str:tag_equipe>/', views.AnalyticsDash.as_view(), name='analytics'),
     # path('professor/update/turmas/<str:tag_turma>/equipes/<str:tag_equipe>/', views.UpdateDataView.as_view(), name='update_data'),
 
     path("adm/instituicoes", views.InstituicaoListView.as_view(), name='instituicoes'),

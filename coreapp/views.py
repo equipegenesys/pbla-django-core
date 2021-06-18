@@ -135,7 +135,7 @@ class UpdateDataView(PermissionRequiredMixin, TemplateView):
         context['user_count'] = len(user_list)
         return context
 
-class ProfessorDash(PermissionRequiredMixin, TemplateView):
+class AnalyticsDash(PermissionRequiredMixin, TemplateView):
     template_name = "vis/dash.html"
     permission_required = ('coreapp.view_dash')
 

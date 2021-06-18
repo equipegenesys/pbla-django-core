@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block sidenav %}
+<div class="col-2" id="sidenav">
+  <div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action" aria-current="true"> Turma </a>
+    <a class="list-group-item list-group-item-secondary" aria-current="true"> Arquitetura de Software 2021.1 </a>
+    <a href="#" class="list-group-item list-group-item-action">Equipe</a>
+    <a class="list-group-item list-group-item-secondary" aria-current="true"> Genesys </a>
+
+  </div>
+</div>
+{% endblock %} {% block navbar-links %}
+<ul class="navbar-nav ml-auto">
+  <li class="nav-item">
+    <a
+      class="nav-link small"
+      href="https://analytics.pbl.tec.br/analytics/turmas/AS0YVX20211/equipes/F4UL/"
+      >Analytics</a
+    >
+  </li>
+  <li class="nav-item">
+    <a class="nav-link small" href="https://analytics.pbl.tec.br/adm/pessoas"
+      >Administração</a
+    >
+  </li>
+  <li class="nav-item">
+    <a
+      class="nav-link small"
+      href="https://analytics.pbl.tec.br/accounts/logout"
+      >Sair</a
+    >
+  </li>
+</ul>
+{% endblock %} {% block content %}{% endblock %}

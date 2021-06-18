@@ -1,40 +1,32 @@
-
-
 <!DOCTYPE html>
 
-<html>
-  <head>
-    {% load static %}
-      <link
-        rel="stylesheet"
-        type="text/css"
-        href="{% static 'coreapp/style.css' %}"
-      />
-    <title>PBL Analytics: Área do professor</title>
-  </head>
+{% extends "analytics_nav.html" %} 
 
-  {% block content %}
-  <body>
-  <div class="main-div"> 
-     <header>{% include 'home/top_professor.html' %}</header>
+{% load static %}
+
+{% block content %}
+{% comment %} 
+<div class="details">
+
+  <div class="main-div">  {% endcomment %}
+    
     <div class="meta-div">
-      {% comment %} <h5 class="hat">Equipe</h5> {% endcomment %}
-      <h5><a id="path" href="https://analytics.pbl.tec.br/professor/turmas">Minhas turmas</a> / <a id="path" href="https://analytics.pbl.tec.br/professor/turmas/{{ tag_turma }}/equipes/">Equipes de {{nome_disciplina}} {{semestre}}</a> / Dashboard</h5>
-        <h1>Equipe {{nome_equipe}}</h1>
-      </div>
-      <div id="content_data">
-      {% comment %} {% if object_list %} {% endcomment %}
-        {% comment %} <iframe height="100%" width="100%" frameBorder="0" src={{ filter_url }}></iframe> {% endcomment %}
-        <iframe class="dash_iframe" height="100%" width="100%" src={{ filter_url }}></iframe>
-      {% comment %} {% else %} {% endcomment %}
-        {% comment %} <p>Você ainda não tem nenhuma turma.</p> {% endcomment %}
-      {% comment %} {% endif %} {% endcomment %}
+      <h3>Equipe {{nome_equipe}}</h3>
     </div>
+    
+    <div id="content_data">
+      <iframe class="dash_iframe" src={{ filter_url }}></iframe>
+    </div>
+    
     <script>
       var object_count = "{{ object_count }}";
     </script>
-    <script src="{% static 'coreapp/equipes.js' %}"></script>
-    </div>
-  </body>
-  {% endblock %}
-</html>
+    
+    <script src="{% static 'coreapp/equipes.js' %}">
+    </script>
+{% comment %}     
+  </div>
+
+</div> {% endcomment %}
+
+{% endblock %}
