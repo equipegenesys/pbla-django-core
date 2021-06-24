@@ -37,7 +37,7 @@
 
 #bto-excluir {
     float: right;
-    margin-top: -4.5em;
+    margin-top: -5.5em;
 }
 
 #bto-editar {
@@ -63,6 +63,7 @@
 .details,
 .btn,
 .pagination,
+.show,
 p {
     font-size: small;
 }
@@ -117,9 +118,19 @@ label {
 }
 
 .dash_iframe {
-    height: 135em;
+    height: 165em;
     width: 100%;
     border: none;
     margin: 0;
     padding: 0;
+    padding-top: 10px;
+}
+
+.bootstrap-select>.dropdown-toggle {
+    width: 13em !important;
+    margin-bottom: 1em;
+}
+
+h3 {
+    color: #00B0FF;
 }

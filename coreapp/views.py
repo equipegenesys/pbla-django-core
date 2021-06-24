@@ -1,3 +1,4 @@
+import json
 # from django.db.models.query_utils import Q
 from django.shortcuts import redirect, render
 # from django.http import HttpResponse, HttpResponseRedirect
@@ -51,7 +52,7 @@ class CustomLoginView(contrib_views.LoginView):
         group_list = self.request.user.groups.values_list('name', flat=True)
         group_list = list(group_list)
         if 'professores' in group_list:
-            return reverse("instituicoes")
+            return reverse("turmas")
         elif 'estudantes' in group_list:
             return reverse("integra")
         else:
@@ -102,6 +103,27 @@ class CustomLogoutView(contrib_views.LogoutView):
     
 #     return render(request, template_name)
 
+class UndefinedAttrs(PermissionRequiredMixin, TemplateView):
+    template_name = "undefined.html"
+    permission_required = ('coreapp.view_dash')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        current_user_id = self.request.user.id
+        turmas_queryset = Turma.objects.all().filter(user__id=current_user_id)
+        minhas_turmas = []
+        equipes_de_minhas_turmas = []        
+        for turma in turmas_queryset:
+            minhas_turmas.append(turma.__str__())
+            equipes_queryset = Equipe.objects.all().filter(turma__tag_turma=turma.tag_turma)
+            equipe_entry = equipes_queryset.all().values()[0]['name'] + " - " + equipes_queryset.all().values()[0]['tag_equipe']
+            equipes_de_minhas_turmas.append(equipe_entry)                  
+        equipes_de_minhas_turmas = set(equipes_de_minhas_turmas)
+        # minhas_turmas_utf = json.dumps(minhas_turmas).encode('utf8')
+
+        context['minhas_turmas'] = minhas_turmas
+        context['minhas_equipes'] = equipes_de_minhas_turmas
+        return context
 
 class UpdateDataView(PermissionRequiredMixin, TemplateView):
     template_name = "vis/update.html"
@@ -140,13 +162,29 @@ class AnalyticsDash(PermissionRequiredMixin, TemplateView):
     permission_required = ('coreapp.view_dash')
 
     def get_context_data(self, **kwargs):
-        
+        context = super().get_context_data(**kwargs)
+
         tag_turma = kwargs.get('tag_turma')
+        if tag_turma is None:
+            tag_turma = 'all'
+        print(tag_turma)
         tag_equipe = kwargs.get('tag_equipe')
+        current_user_id = self.request.user.id
+
+        turmas_queryset = Turma.objects.all().filter(user__id=current_user_id)
+
+        minhas_turmas = []
+        equipes_de_minhas_turmas = []        
+        for turma in turmas_queryset:
+            minhas_turmas.append(turma.__str__())
+            equipes_queryset = Equipe.objects.all().filter(turma__tag_turma=turma.tag_turma)
+            equipe_entry = equipes_queryset.all().values()[0]['name'] + " - " + equipes_queryset.all().values()[0]['tag_equipe']
+            equipes_de_minhas_turmas.append(equipe_entry)                  
+        equipes_de_minhas_turmas = set(equipes_de_minhas_turmas)
+        minhas_turmas_utf = json.dumps(minhas_turmas).encode('utf8')
 
         turma_equipe = TurmaEquipe()
-        context = super().get_context_data(**kwargs)
-        
+
         if tag_equipe:
             dados_turma = turma_equipe.get_name(tag_turma=tag_turma, tag_equipe=tag_equipe)
             context['nome_equipe'] = dados_turma['Equipe']
@@ -155,9 +193,14 @@ class AnalyticsDash(PermissionRequiredMixin, TemplateView):
         
         context['filter_url'] = f"https://analytics.pbl.tec.br/dash/{tag_turma}/{tag_equipe}"
         context['nome_disciplina'] = dados_turma['Disciplina']
+        context['subtitulo_metadados'] = f"Disciplina: {dados_turma['Disciplina']} | Semestre: {dados_turma['Semestre']}"
         context['semestre'] = dados_turma['Semestre']
         context['tag_turma'] = tag_turma
         context['tag_equipe'] = tag_equipe
+        context['minhas_turmas_json'] = minhas_turmas_utf.decode()
+        context['minhas_turmas'] = minhas_turmas
+        context['minhas_equipes'] = equipes_de_minhas_turmas
+
         # context['updating_data'] = updating_data
         return context
 

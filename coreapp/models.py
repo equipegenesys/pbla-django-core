@@ -236,20 +236,23 @@ class TurmasClass(object):
 class TurmaEquipe(object):
     tag_turma = None
 
-    def get_name(self, tag_turma: str, **kwargs):
-        turma_equipe_dict = dict()        
-        turma = Turma.objects.get(tag_turma=tag_turma)
-        tag_equipe = kwargs.get('tag_equipe')
-
-        turma_equipe_dict['Disciplina'] = turma.disciplina.name
-        turma_equipe_dict['Semestre'] = str(
-            turma.ano) + "." + str(turma.semestre)
+    def get_name(self, tag_equipe: str, **kwargs):
+        tag_turma = kwargs.get('tag_turma')
+        turma_equipe_dict = dict()       
+        equipe = Equipe.objects.get(tag_equipe=tag_equipe)
+        turma_equipe_dict['Equipe'] = equipe.name
         
-        if tag_equipe:
-            equipe = Equipe.objects.get(tag_equipe=tag_equipe)
-            turma_equipe_dict['Equipe'] = equipe.name
+        if tag_turma != 'all':  
+            turma = Turma.objects.get(tag_turma=tag_turma)
+            turma_equipe_dict['Disciplina'] = turma.disciplina.name
+            turma_equipe_dict['Semestre'] = str(
+                turma.ano) + "." + str(turma.semestre)
+        else:
+            turma_equipe_dict['Disciplina'] = 'Todas as disicplinas'
+            turma_equipe_dict['Semestre'] = 'Todos os semestres'
 
         # print(turma_equipe_dict)
 
         return turma_equipe_dict
+
 

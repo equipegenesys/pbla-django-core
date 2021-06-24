@@ -5,6 +5,8 @@ urlpatterns = [
     path('professor/turmas/', views.TurmasListView.as_view(), name='professor_turmas'),
     path('estudante/integra', views.Estudante.as_view(), name='integra'),
     path('estudante/disciplinas', views.TurmasEstudante.as_view(), name='disciplinas'),
+    path('analytics/turmas/<str:tag_turma>/equipes/undefined/', views.UndefinedAttrs.as_view(), name='undefined-attrs'),
+    path('analytics/turmas/undefined/equipes/<str:tag_equipe>/', views.AnalyticsDash.as_view(), name='analytics'),
     path('analytics/turmas/<str:tag_turma>/equipes/<str:tag_equipe>/', views.AnalyticsDash.as_view(), name='analytics'),
     # path('professor/update/turmas/<str:tag_turma>/equipes/<str:tag_equipe>/', views.UpdateDataView.as_view(), name='update_data'),
 

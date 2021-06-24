@@ -1,19 +1,92 @@
-{% extends "base.html" %} {% block sidenav %}
+{% extends "base.html" %} 
+
+{% block sidenav %}
+
+
+
 <div class="col-2" id="sidenav">
-  <div class="list-group">
+  {% comment %} <div class="list-group">
     <a href="#" class="list-group-item list-group-item-action" aria-current="true"> Turma </a>
     <a class="list-group-item list-group-item-secondary" aria-current="true"> Arquitetura de Software 2021.1 </a>
     <a href="#" class="list-group-item list-group-item-action">Equipe</a>
     <a class="list-group-item list-group-item-secondary" aria-current="true"> Genesys </a>
+    </div> {% endcomment %}
 
-  </div>
+  <select class="selectpicker" id="equipe-select" data-live-search="true">
+
+    <option value="" selected disabled>Selecione a Equipe</option>
+
+    {% for equipe in minhas_equipes %}
+
+    <option>{{equipe}}</option>
+    {% empty %} 
+
+    <option >Desculpe, não há equipes na lista.</option>
+
+    {% endfor %}
+
+  </select>
+    
+  <select class="selectpicker" id="turma-select" data-live-search="true" >
+
+    <option value="" selected enabled>Todas as turmas</option>
+
+    {% for turma in minhas_turmas %}
+
+    <option>{{turma}}</option>
+    {% empty %} 
+
+    <option >Desculpe, não há turmas na lista.</option>
+
+    {% endfor %}
+
+  </select>
+
+    <button class="btn btn-outline-primary" style="width: 13em" onclick="change()">
+      Analisar
+    </button>
+
+
+
+  <script>
+    var turma;
+    var equipe;
+    var minhas_turmas = {{ minhas_turmas|safe }};
+
+    console.log(minhas_turmas)
+
+    $(document).ready(function(){
+      $('#equipe-select').change(function(){
+         equipe = this.value;
+         equipe = equipe.slice(-4);
+         console.log("a equipe é "+equipe)
+      });
+    });
+
+    $(document).ready(function(){
+      $('#turma-select').change(function(){
+         turma = this.value;
+         turma = turma.substr(turma.lastIndexOf(" ") + 1, turma.length);
+         
+         console.log("a turma é "+turma)      
+      });
+    });
+
+    function change() {
+      window.location.replace('https://analytics.pbl.tec.br/analytics/turmas/'+turma+'/equipes/'+equipe);
+    }   
+  </script> 
+
 </div>
-{% endblock %} {% block navbar-links %}
+
+{% endblock %} 
+
+{% block navbar-links %}
 <ul class="navbar-nav ml-auto">
   <li class="nav-item">
     <a
       class="nav-link small"
-      href="https://analytics.pbl.tec.br/analytics/turmas/AS0YVX20211/equipes/F4UL/"
+      href="https://analytics.pbl.tec.br/analytics/turmas/I0Q4A20211/equipes/F4UL/"
       >Analytics</a
     >
   </li>
