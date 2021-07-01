@@ -5,6 +5,7 @@ from strgen import StringGenerator as SG
 from string import ascii_uppercase as alphabet
 from django.contrib.auth.models import User
 from django.urls import reverse
+from . import gateway
 
 class Pessoa(User):
     # objects = PersonManager()
@@ -27,6 +28,10 @@ class Pessoa(User):
 
     def get_absolute_url(self):
         return reverse('pessoa-detalhe', kwargs={'pk': self.pk})
+
+    def __str__(self):
+        fullname = self.first_name + " " + self.last_name
+        return fullname
 
 class Dash(models.Model):
     pass
@@ -204,6 +209,51 @@ class Equipe(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.tag_equipe}'
+
+
+class Integracao(models.Model):
+    name = models.CharField(max_length=50, blank=False)
+    root_endpoint = models.CharField(max_length=100)
+    pessoa = models.ManyToManyField(Pessoa, through='UserIntegBridge')
+    equipe = models.ManyToManyField(Equipe, through='EquipeIntegBridge')
+    instituicao = models.ManyToManyField(Instituicao, through='InstituicaoIntegBridge')
+
+    def __str__(self):
+        return self.name
+
+class UserIntegBridge(models.Model):
+    pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE)
+    integracao = models.ForeignKey(Integracao, on_delete=models.CASCADE)
+    first_created = models.DateTimeField(auto_now_add=True)
+    is_active_update_date = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField()
+
+class EquipeIntegBridge(models.Model):
+    equipe = models.ForeignKey(Equipe, on_delete=models.CASCADE)
+    integracao = models.ForeignKey(Integracao, on_delete=models.CASCADE)    
+    first_created = models.DateTimeField(auto_now_add=True)
+    is_active_update_date = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField()
+
+class InstituicaoIntegBridge(models.Model):
+    instituicao = models.ForeignKey(Instituicao, on_delete=models.CASCADE)
+    integracao = models.ForeignKey(Integracao, on_delete=models.CASCADE)    
+    first_created = models.DateTimeField(auto_now_add=True)
+    is_active_update_date = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField()
+
+    def integ_status(self):
+        # print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH',self.integracao.name)
+        if gateway.get_integ_status(integ = self.integracao.name) == 'true':
+            return 'Conectado'
+        else: 
+            return 'Não conectado'
+
+    def get_insti_id(self):
+        return self.instituicao.pk
+
+    def get_integ_id(self):
+        return self.integracao.pk
     
 
 

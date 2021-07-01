@@ -14,7 +14,7 @@ from django_tables2 import SingleTableView
 from . import tables, forms
 
 from django.views.generic import TemplateView, ListView, DetailView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView, FormView
 # from django.views.generic.list import MultipleObjectMixin
 # from django.template.response import TemplateResponse
 
@@ -31,9 +31,11 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from . import gateway
-from .serializers import UserSerializer, GroupSerializer, TurmaSerializer, IntegrantesSerializer
+from . import serializers
 from .models import Turma, TurmasClass, TurmaEquipe, Equipe, Disciplina, Instituicao, Curso, Pessoa
+from .models import InstituicaoIntegBridge
 from django.db.models import Q
+import pdb
 
 # from multiprocessing import Pool
 # from threading import Thread
@@ -620,7 +622,7 @@ class UsersEquipeView(APIView):
     def get(self, request, **kwargs):
         tag_equipe = kwargs.get('tag_equipe')
         queryset = Equipe.objects.get(tag_equipe=tag_equipe)
-        serializer = IntegrantesSerializer(queryset)
+        serializer = serializers.IntegrantesSerializer(queryset)
         response = Response(serializer.data, status=status.HTTP_200_OK)
         return response
 
@@ -642,6 +644,80 @@ class RealNames(APIView):
         
         return response
 
+class IntegApi(APIView):
+    permission_classes = [permissions.AllowAny]
 
-    
-    
+    def post(self, request, format=None):
+
+        # print(self.request.path[16:-1])
+
+        # user_id = kwargs.get('id')
+        # equipe = kwargs.get('tag_equipe')
+        # intituicao = kwargs.get('inst_pk')
+        # activated = kwargs.get('activated')
+
+        if self.request.path[16:-1] == 'pessoa':
+            serializer = serializers.UserIntegSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        elif self.request.path[16:-1] == 'equipe':
+            serializer = serializers.EquipeIntegSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        elif self.request.path[16:-1] == 'instituicao':
+            serializer = serializers.InstituicaoIntegSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            return Response('nenhum das opções foi fornecida', status=status.HTTP_200_OK)
+
+
+class IntegracaoInstiListView(PermissionRequiredMixin, SingleTableView):
+    model = InstituicaoIntegBridge
+    permission_required = ('coreapp.view_dash')
+    table_class = tables.IntegracaoInstiTable
+    table_data = InstituicaoIntegBridge.objects.filter(Q(is_active=True))
+    template_name = 'tables_integ.html'
+    table_pagination = {
+        "per_page": 8
+    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Integrações das instituições'
+        context['subpath'] = 'integ'
+        context['object_count'] = len(self.model.objects.values_list())
+        return context
+
+class IntegracaoInstiUpdateView(PermissionRequiredMixin, FormView):
+    permission_required = ('coreapp.view_dash')
+    template_name = 'discord_token_form.html'
+    form_class = forms.IntegracaoInstiForm
+    success_url = 'https://analytics.pbl.tec.br/adm/instituicoes/integ'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        insti_id = str(self.kwargs.get("insti_id"))
+        integ_id = str(self.kwargs.get("integ_id"))
+        context['insti_id'] = insti_id
+        context['integ_id'] = integ_id
+        # print(insti_id, integ_id)
+        return context
+
+    def form_valid(self, form):
+        print(form.cleaned_data['discord_token'])
+        gateway.post_discord_token(form.cleaned_data['discord_token'])
+        return super().form_valid(form)
+
+
+    # def get_success_url(self, **kwargs):
+    #     # pk = self.kwargs.get("pk")
+    #     return reverse('insti-integ')

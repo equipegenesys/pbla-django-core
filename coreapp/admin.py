@@ -2,20 +2,8 @@ from . import models
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.forms import UserChangeForm
-
-
-# class TurmasInline(admin.StackedInline):
-#     model = models.Turma
-#     verbose_name_plural = 'turmas'
-#     can_delete = False
-#     filter_horizontal = ('turma')
     
 admin.site.unregister(User)
-
-# class MyUserChangeForm(UserChangeForm):
-#     class Meta(UserChangeForm.Meta):
-#         model = User
 
 
 @admin.register(User)
@@ -39,9 +27,6 @@ class TurmaeAdmin(admin.ModelAdmin):
         if obj: # when editing an object
             return ['tag_turma']
         return self.readonly_fields
-
-    # def tag_turma(self, obj):
-    #     return '*** CLASSIFIED *** {}'.format(obj.tag_turma)
 
 
 class EquipeAdmin(admin.ModelAdmin):
@@ -71,8 +56,40 @@ class DisciplinaAdmin(admin.ModelAdmin):
         return self.readonly_fields
 
 
+class InstituicaoInline(admin.TabularInline):
+    model = models.Integracao.instituicao.through
+    extra = 0
+    max_num = 0
+    readonly_fields = ['instituicao','first_created','is_active_update_date','is_active']
+    can_delete = False
+
+class EquipeInline(admin.TabularInline):
+    model = models.Integracao.equipe.through
+    extra = 0
+    max_num = 0
+    readonly_fields = ['equipe','first_created','is_active_update_date','is_active']
+    can_delete = False
+
+class PessoaInline(admin.TabularInline):
+    model = models.Integracao.pessoa.through
+    extra = 0
+    max_num = 0
+    readonly_fields = ['pessoa','first_created','is_active_update_date','is_active']
+    can_delete = False
+
+class IntegracaoAdmin(admin.ModelAdmin):
+    fields = ['name', 'root_endpoint']
+    list_display = ('name', 'root_endpoint')
+    inlines = [
+        InstituicaoInline,
+        EquipeInline,
+        PessoaInline
+    ]
+
+
 admin.site.register(models.Instituicao)
 admin.site.register(models.Curso)
 admin.site.register(models.Disciplina, DisciplinaAdmin)
 admin.site.register(models.Turma, TurmaeAdmin)
 admin.site.register(models.Equipe, EquipeAdmin)
+admin.site.register(models.Integracao, IntegracaoAdmin)

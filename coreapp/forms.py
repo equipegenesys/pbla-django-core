@@ -112,4 +112,10 @@ class PessoaForm(forms.ModelForm):
             pessoa.save()
         return pessoa
 
-# <input type="checkbox" name="is_staff" id="form-name" class="form-control">
+class IntegracaoInstiForm(forms.Form):
+    discord_token = forms.CharField(label='Insira novo token do discord', max_length=100)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['discord_token'].widget.attrs.update({'class': 'form-control'})
+

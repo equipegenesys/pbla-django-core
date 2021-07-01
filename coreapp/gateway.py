@@ -17,6 +17,13 @@ def get_gdrive_integ_link(user_id: int):
 	response = response[1:-1]
 	return response
 
+def get_integ_status(integ: str):
+	if integ == 'discord':
+		r = requests.get('http://172.20.0.10:8080/api/discord/integ/v1/status')
+		return r.text
+	if integ == 'gdrive':
+		return 'Status do Google Drive indisponível para instituição'
+
 # @sync_to_async
 async def update_gdrive_records(users: list):
 	async with httpx.AsyncClient(timeout=None) as client:
@@ -31,7 +38,11 @@ async def update_gdrive_records(users: list):
 			# response_dict['user '+str(user)] = [response.status_code, response.text]
 	# print(response_dict)
 	return response
-
+	
+def post_discord_token(token: str):
+	payload = {'token': token}
+	p = requests.post('http://172.22.0.9:8080/api/discord/integ/v1/token', json = payload)
+	print("POST status code response:", p.status_code)
 
 # def update_gdrive_records(user_id: int):
 # 	url = f"http://pbla_gdrive_1/api/integ/gdrive/user/update/records?user_id={user_id}"

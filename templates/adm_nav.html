@@ -1,6 +1,8 @@
 {% extends "base.html" %} {% block sidenav %}
 <div class="col-2" id="sidenav">
+
   <div class="list-group">
+    <h7 class="list-group-item"> <b>Cadastro</b> </h7>
     <a href="https://analytics.pbl.tec.br/adm/instituicoes" class="list-group-item list-group-item-action" aria-current="true"> Instituicoes </a>
     <a href="https://analytics.pbl.tec.br/adm/cursos" class="list-group-item list-group-item-action">Cursos</a>
     <a href="https://analytics.pbl.tec.br/adm/disciplinas" class="list-group-item list-group-item-action">Disciplinas</a>
@@ -8,6 +10,14 @@
     <a href="https://analytics.pbl.tec.br/adm/equipes" class="list-group-item list-group-item-action" tabindex="-1" aria-disabled="true">Equipes</a>
     <a href="https://analytics.pbl.tec.br/adm/pessoas" class="list-group-item list-group-item-action" tabindex="-1" aria-disabled="true">Pessoas</a>
   </div>
+
+  <br>
+
+  <div class="list-group">
+    <h7 class="list-group-item"> <b>Integrações</b> </h7>
+    <a href="https://analytics.pbl.tec.br/adm/instituicoes/integ" class="list-group-item list-group-item-action" aria-current="true"> Instituicoes </a>
+  </div>
+
 </div>
 {% endblock %} {% block navbar-links %}
 <ul class="navbar-nav ml-auto">

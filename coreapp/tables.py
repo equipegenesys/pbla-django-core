@@ -86,3 +86,34 @@ class PersonTable(tables.Table):
             # 'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
             'class': 'hover-class'
         }
+
+class IntegracaoInstiTable(tables.Table):
+    # first_name = tables.LinkColumn('pessoas', empty_values=())  # not in meta
+    color = 'green'
+
+    status_column = tables.Column(
+        accessor='integ_status',
+        verbose_name='Status',
+        attrs={
+            "td": {
+                # "style": "color: %s" % lambda value: 'green' if value == 'Conectado' else 'green'
+                "style": lambda value: "color: green; font-weight: bold" if value == 'Conectado' else "color: red; font-weight: bold"
+                }
+            }
+        )
+
+    instituicao_id_column = tables.Column(accessor='get_insti_id',
+         verbose_name='ID da instituição', visible=True)
+
+    integracao_id_column = tables.Column(accessor='get_integ_id',
+         verbose_name='ID da integração', visible=True)
+
+    class Meta:
+        model = models.InstituicaoIntegBridge
+        template_name = "django_tables2/bootstrap4.html"
+        fields = ("instituicao", "instituicao_id_column", "integracao", "integracao_id_column", "status_column")
+        attrs = {"class": "table table-hover"}
+        row_attrs = {
+            # 'onclick': "window.location='https://analytics.pbl.tec.br/adm/pessoas'",
+            'class': 'hover-class'
+        }

@@ -1,0 +1,25 @@
+{% extends "adm_nav.html" %} 
+{% load static %}
+{% block content %}
+        {% if object_list %}
+            <h3>{{title}}</h3>
+
+            {% comment %} <form action="https://analytics.pbl.tec.br/adm/{{ subpath }}/add">
+                <input type="submit" id="bto-enviar" class="btn btn-primary" value="Adicionar" />
+            </form> {% endcomment %}
+
+            {% load render_table from django_tables2 %}
+            {% render_table table %}        
+        {% else %}
+            <p>Ainda não integrações para as instituições.</p>
+        {% endif %}
+
+        <script>
+            var object_count = "{{ object_count }}";
+            var title = "{{ title }}";
+            var subpath = "{{ subpath }}";
+        </script>
+            <script src="{% static 'coreapp/tables_integ.js' %}">
+        </script>
+
+{% endblock %}
