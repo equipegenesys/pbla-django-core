@@ -17,12 +17,20 @@ def get_gdrive_integ_link(user_id: int):
 	response = response[1:-1]
 	return response
 
-def get_integ_status(integ: str):
+def get_integ_status(integ: str, **kwargs):
 	if integ == 'discord':
 		r = requests.get('http://172.20.0.10:8080/api/discord/integ/v1/status')
 		return r.text
 	if integ == 'gdrive':
-		return 'Status do Google Drive indisponível para instituição'
+		url = "http://172.22.0.2/api/integ/gdrive/status/user/"
+		user_id = kwargs.get('user_id')
+		response = requests.get(f'{url}{user_id}')
+		response = response.json()
+
+		if response['integrado'] == True:
+			return 'true'
+		else:
+			return 'false'
 
 # @sync_to_async
 async def update_gdrive_records(users: list):

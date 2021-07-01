@@ -9,6 +9,8 @@ from django.urls import reverse, reverse_lazy
 # from django.template import loader
 from django import template
 from django.core import serializers as django_serializer
+from django.http import HttpResponseRedirect
+
 
 from django_tables2 import SingleTableView
 from . import tables, forms
@@ -33,9 +35,11 @@ from rest_framework import status
 from . import gateway
 from . import serializers
 from .models import Turma, TurmasClass, TurmaEquipe, Equipe, Disciplina, Instituicao, Curso, Pessoa
-from .models import InstituicaoIntegBridge
+from .models import InstituicaoIntegBridge, UserIntegBridge
 from django.db.models import Q
 import pdb
+
+from coreapp import models
 
 # from multiprocessing import Pool
 # from threading import Thread
@@ -65,45 +69,6 @@ class CustomLoginView(contrib_views.LoginView):
 class CustomLogoutView(contrib_views.LogoutView):
     def get_success_url(self):
         return reverse("login")
-
-# class CustomPasswordChangeView(contrib_views.PasswordChangeView):
-#     def get_success_url(self):
-#         return reverse("login")
-
-# class CustomPasswordChangeView(contrib_views.PasswordChangeView):
-#     def get_success_url(self):
-#         return reverse("login")
-
-# class CustomPasswordResetView(contrib_views.PasswordResetView):
-#     pass
-
-# class CustomPwresetView(contrib_views.PasswordResetConfirmView):
-#     pass
-
-# class CustomPwresetView(contrib_views.PasswordResetDoneView):
-#     pass
-
-
-# async def UpdateDataView(request, tag_turma, tag_equipe):
-#     template_name = 'vis/update.html'
-    
-#     # print(tag_turma, tag_equipe)
-    
-#     user_list = []
-#     # users = User.objects.filter(equipe__tag_equipe=tag_equipe)
-
-#     users = await sync_to_async(list)(User.objects.filter(equipe__tag_equipe=tag_equipe))
-#     # print(users)
-    
-#     for user in users:
-#         user_list.append(user.id)
-#     print("           user_list:", user_list)
-    
-#     results  = await asyncio.gather(gateway.update_gdrive_records(user_list))
-
-#     print(results)
-    
-#     return render(request, template_name)
 
 class UndefinedAttrs(PermissionRequiredMixin, TemplateView):
     template_name = "undefined.html"
@@ -474,6 +439,22 @@ class TurmaUpdateView(PermissionRequiredMixin, UpdateView):
         pk = self.kwargs.get("pk")
         return reverse('turma-detalhe', kwargs={'pk': pk})
 
+class TurmaListViewEstudante(PermissionRequiredMixin, SingleTableView):
+    model = Turma
+    permission_required = ('coreapp.view_myestudante')
+    table_class = tables.TurmaTableEstudante
+    template_name = 'tables_estudante.html'
+    table_pagination = {
+        "per_page": 8
+    }
+    def get_queryset(self):
+        return Turma.objects.filter(user__id=self.request.user.id)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Minhas disciplinas'
+        context['subpath'] = 'turmas'
+        context['object_count'] = len(self.model.objects.values_list())
+        return context
 
 class EquipeListView(PermissionRequiredMixin, SingleTableView):
     model = Equipe
@@ -574,36 +555,6 @@ class PessoaDeleteView(PermissionRequiredMixin, DeleteView):
         return super(PessoaDeleteView, self).delete(*args, **kwargs)
 
 
-
-# class MyAdmView(PermissionRequiredMixin, TemplateView):
-#     template_name = "home/adm.html"
-#     permission_required = ('coreapp.view_myadm')
-
-# class UserViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows users to be viewed or edited.
-#     """
-#     queryset = User.objects.all().order_by('-date_joined')
-#     serializer_class = UserSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-
-# class GroupViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows groups to be viewed or edited.
-#     """
-#     queryset = Group.objects.all()
-#     serializer_class = GroupSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-
-# class TurmaViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows turmas to be viewed or edited.
-#     """
-#     queryset = Turma.objects.all()
-#     serializer_class = TurmaSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-
-
 class TurmaUserView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
@@ -698,6 +649,7 @@ class IntegracaoInstiListView(PermissionRequiredMixin, SingleTableView):
         return context
 
 class IntegracaoInstiUpdateView(PermissionRequiredMixin, FormView):
+
     permission_required = ('coreapp.view_dash')
     template_name = 'discord_token_form.html'
     form_class = forms.IntegracaoInstiForm
@@ -713,11 +665,37 @@ class IntegracaoInstiUpdateView(PermissionRequiredMixin, FormView):
         return context
 
     def form_valid(self, form):
+
         print(form.cleaned_data['discord_token'])
         gateway.post_discord_token(form.cleaned_data['discord_token'])
         return super().form_valid(form)
 
+class IntegracaoUserListView(PermissionRequiredMixin, SingleTableView):
+    model = UserIntegBridge
+    permission_required = ('coreapp.view_myestudante')
+    table_class = tables.IntegracaoUserTable
+    # table_data = UserIntegBridge.objects.filter(Q(is_active=True))
+    template_name = 'tables_integ_estudante.html'
+    table_pagination = {
+        "per_page": 8
+    }
+    def get_queryset(self):
+        return UserIntegBridge.objects.filter(pessoa__id=self.request.user.id)
 
-    # def get_success_url(self, **kwargs):
-    #     # pk = self.kwargs.get("pk")
-    #     return reverse('insti-integ')
+    def get_context_data(self, **kwargs):
+        g_drive_integ_link = gateway.get_gdrive_integ_link(self.request.user.id)
+
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Minhas integrações'
+        context['subpath'] = 'integ'
+        context['object_count'] = len(self.model.objects.values_list())
+        context['g_drive_integ_link'] = g_drive_integ_link
+        context['current_user_id'] = self.request.user.id
+        return context
+
+def create_gdrive_integ(request):
+    models.UserIntegBridge.objects.create(
+        pessoa = models.Pessoa.objects.get(pk=request.user.id), 
+        integracao = models.Integracao.objects.get(pk=1), 
+        is_active = True)
+    return HttpResponseRedirect('https://analytics.pbl.tec.br/estudante/integra')

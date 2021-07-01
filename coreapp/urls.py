@@ -2,13 +2,13 @@ from django.urls import path, include
 from . import views, urls_api
 
 urlpatterns = [
-    path('professor/turmas/', views.TurmasListView.as_view(), name='professor_turmas'),
-    path('estudante/integra', views.Estudante.as_view(), name='integra'),
-    path('estudante/disciplinas', views.TurmasEstudante.as_view(), name='disciplinas'),
+    path('estudante/integra', views.IntegracaoUserListView.as_view(), name='integra'),
+    path('estudante/disciplinas', views.TurmaListViewEstudante.as_view(), name='disciplinas'),
+    path('estudante/integra/gdrive/add', views.create_gdrive_integ),
+
     path('analytics/turmas/<str:tag_turma>/equipes/undefined/', views.UndefinedAttrs.as_view(), name='undefined-attrs'),
     path('analytics/turmas/undefined/equipes/<str:tag_equipe>/', views.AnalyticsDash.as_view(), name='analytics'),
     path('analytics/turmas/<str:tag_turma>/equipes/<str:tag_equipe>/', views.AnalyticsDash.as_view(), name='analytics'),
-    # path('professor/update/turmas/<str:tag_turma>/equipes/<str:tag_equipe>/', views.UpdateDataView.as_view(), name='update_data'),
 
     path("adm/instituicoes", views.InstituicaoListView.as_view(), name='instituicoes'),
     path("adm/cursos", views.CursoListView.as_view(), name='cursos'),

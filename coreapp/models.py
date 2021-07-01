@@ -227,6 +227,15 @@ class UserIntegBridge(models.Model):
     first_created = models.DateTimeField(auto_now_add=True)
     is_active_update_date = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField()
+    def integ_status(self):
+        if gateway.get_integ_status(integ = self.integracao.name, user_id = self.pessoa.pk) == 'true':
+            return 'Conectado'
+        else: 
+            return 'Não conectado'
+    def get_pessoa_id(self):
+        return self.pessoa.pk
+    def get_integ_id(self):
+        return self.integracao.pk
 
 class EquipeIntegBridge(models.Model):
     equipe = models.ForeignKey(Equipe, on_delete=models.CASCADE)
@@ -241,17 +250,14 @@ class InstituicaoIntegBridge(models.Model):
     first_created = models.DateTimeField(auto_now_add=True)
     is_active_update_date = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField()
-
     def integ_status(self):
         # print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH',self.integracao.name)
         if gateway.get_integ_status(integ = self.integracao.name) == 'true':
             return 'Conectado'
         else: 
             return 'Não conectado'
-
     def get_insti_id(self):
         return self.instituicao.pk
-
     def get_integ_id(self):
         return self.integracao.pk
     
