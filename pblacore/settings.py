@@ -32,7 +32,7 @@ SECRET_KEY = 'scb9t+)zmz7d22gmg*ve8w4f276r-e78p$u8$b&4v%6(zb@!hb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['analytics.pbl.tec.br', 'dash', 'pbla_core_1', '172.22.0.8']
+ALLOWED_HOSTS = ['analytics.pbl.tec.br', 'dash', 'pbla_core_1', '172.22.0.3', 'pbl.tec.br']
 
 
 
@@ -138,7 +138,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-X_FRAME_OPTIONS = 'ALLOW-FROM https://analytics.pbl.tec.br/dash/'
+# X_FRAME_OPTIONS = 'ALLOW-FROM https://analytics.pbl.tec.br/dash/'
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -152,3 +152,9 @@ REST_FRAMEWORK = {
 }
 
 LOGOUT_REDIRECT_URL = 'https://analytics.pbl.tec.br/accounts/login'
+
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_BROWSER_XSS_FILTER = True
