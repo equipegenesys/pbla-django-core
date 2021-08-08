@@ -41,6 +41,9 @@ import pdb
 
 from coreapp import models
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_http_methods
+
 # from multiprocessing import Pool
 # from threading import Thread
 
@@ -51,6 +54,10 @@ from coreapp import models
 register = template.Library()
 
 class CustomLoginView(contrib_views.LoginView):
+
+    @method_decorator(require_http_methods(["GET", "POST"]))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     form_class = forms.UserLoginForm
 
@@ -69,12 +76,18 @@ class CustomLoginView(contrib_views.LoginView):
                 return reverse("adm")
 
 class CustomLogoutView(contrib_views.LogoutView):
+
+    @method_decorator(require_http_methods(["GET"]))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
     def get_success_url(self):
         return reverse("login")
 
 class UndefinedAttrs(PermissionRequiredMixin, TemplateView):
     template_name = "undefined.html"
     permission_required = ('coreapp.view_dash')
+    print("foi")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
